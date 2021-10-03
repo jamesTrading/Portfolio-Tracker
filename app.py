@@ -18,7 +18,7 @@ import pandas_ta as pta
 
 
 def Model_Display(total_value):
-    url = https://github.com/jamesTrading/Portfolio-Tracker/blob/main/PortfolioModelJames.csv
+    url = "https://github.com/jamesTrading/Portfolio-Tracker/blob/main/PortfolioModelJames.csv"
     df = pd.read_csv(url)
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
