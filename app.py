@@ -19,6 +19,13 @@ import pandas_ta as pta
 
 def Model_Display(total_value, reason):
     df = pd.read_csv('PortfolioModelJames.csv')
+    if reason == 'weights':
+        x = 0
+        outputlist = []
+        while x < len(df['Holdings']):
+            outputlist.append((df['Holdings'][x], "   ", df['Weights'][x]))
+            x = x + 1
+        return outputlist
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
     amount_of_shares = []
@@ -50,12 +57,12 @@ def Model_Display(total_value, reason):
     df1['Portfolio'] = portfolio_value
     df1['Market'] = market_portfolio
     df1 = df1.bfill(axis ='rows')
-    fig = go.Figure()
-    king = ('Portfolio Performance Over 2 Years')
-    fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
-    fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
-    fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
     if reason == 'figure':
+        fig = go.Figure()
+        king = ('Portfolio Performance of 10K Invested 2 Years Ago')
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
         return fig
     return
 
@@ -82,7 +89,11 @@ app.layout = html.Div([
         dcc.Input(id='totalvalue', value=10000, type='number', debounce=True),
         html.Button('Submit', id='btn-nclicks-1', n_clicks=0),
         dcc.Graph(id='my-graph')
-        ],style={'width': '75%','display': 'inline-block'})
+        ],style={'width': '75%','display': 'inline-block'}),
+    html.Div([
+        html.H4('Holdings and their Weights'),
+        html.Table(id = 'my-weights'),
+        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
 ])
 
 
@@ -91,6 +102,13 @@ app.layout = html.Div([
 def update_graph(totalvalue):
     fig = Model_Display(totalvalue, 'figure')
     return fig
+
+#This app callback updates the graph as per the relevant company
+@app.callback(Output('my-weights','figure'),[Input('totalvalue','value')])
+def update_weights(totalvalue):
+    outputlist = Model_Display(totalvalue, 'weights')
+    # Header
+    return [html.Tr(html.Td(output)) for output in outputlist]
 
 
 if __name__ == '__main__':
