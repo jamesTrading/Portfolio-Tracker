@@ -63,7 +63,7 @@ def Model_Display(total_value, reason):
         king = ('Portfolio Performance of 10K Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
-        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1000, height = 700)
         return fig
     return
 
@@ -90,11 +90,11 @@ app.layout = html.Div([
         dcc.Input(id='totalvalue', value=10000, type='number', debounce=True),
         html.Button('Submit', id='btn-nclicks-1', n_clicks=0),
         dcc.Graph(id='my-graph')
-        ],style={'width': '75%','display': 'inline-block'}),
+        ],style={'width': '60%','display': 'inline-block'}),
     html.Div([
         html.H4('Holdings and their Weights'),
         html.Table(id = 'my-weights'),
-        ],style={'width': '15%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
+        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
 ])
 
 
@@ -105,7 +105,7 @@ def update_graph(totalvalue):
     return fig
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-weights','figure'),[Input('totalvalue','value')])
+@app.callback(Output('my-weights','children'),[Input('totalvalue','value')])
 def update_weights(totalvalue):
     outputlist = Model_Display(totalvalue, 'weights')
     # Header
