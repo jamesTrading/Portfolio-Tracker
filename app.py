@@ -51,8 +51,8 @@ def Model_Display(total_value):
     df1['Market'] = market_portfolio
     fig = go.Figure()
     king = ('Portfolio Performance Over 2 Years')
-    fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines',marker=dict(size=1, color="blue")))
-    fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines',marker=dict(size=1, color="red")))
+    fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
+    fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines' name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
     fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
     return fig
 
