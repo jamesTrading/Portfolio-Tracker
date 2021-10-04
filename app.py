@@ -17,7 +17,7 @@ import yfinance as yf
 import pandas_ta as pta
 
 
-def Model_Display(total_value):
+def Model_Display(total_value, reason):
     df = pd.read_csv('PortfolioModelJames.csv')
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
@@ -55,7 +55,9 @@ def Model_Display(total_value):
     fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
     fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
     fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
-    return fig
+    if reason == 'figure':
+        return fig
+    return
 
 
 
@@ -87,7 +89,7 @@ app.layout = html.Div([
 #This app callback updates the graph as per the relevant company
 @app.callback(Output('my-graph','figure'),[Input('totalvalue','value')])
 def update_graph(totalvalue):
-    fig = Model_Display(totalvalue)
+    fig = Model_Display(totalvalue, 'figure')
     return fig
 
 
