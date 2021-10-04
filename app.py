@@ -30,6 +30,8 @@ def Model_Display(total_value):
         df1[h][0] = df2['Close'][1]
         amount_of_shares.append(df['Dollar Allocation'][count]/df1[h][0])
         count = count + 1
+    market = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    df1['Market'] = market['Close']
     df['Units'] = amount_of_shares
     count1 = 0
     count2 = 0
@@ -47,6 +49,7 @@ def Model_Display(total_value):
     fig = go.Figure()
     king = ('Portfolio Performance Over 2 Years')
     fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines',marker=dict(size=1, color="blue"),showlegend=False))
+    fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
     fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1200, height = 700)
     return fig
 
