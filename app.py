@@ -25,7 +25,7 @@ def Model_Display(total_value, reason):
         while x < len(df['Holdings']):
             outputlist.append((df['Holdings'][x], "   ", df['Weights'][x]))
             x = x + 1
-        print("success")
+        print(outputlist)
         return outputlist
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
