@@ -25,6 +25,7 @@ def Model_Display(total_value, reason):
         while x < len(df['Holdings']):
             outputlist.append((df['Holdings'][x], "   ", df['Weights'][x]))
             x = x + 1
+        print("success")
         return outputlist
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
@@ -93,7 +94,7 @@ app.layout = html.Div([
     html.Div([
         html.H4('Holdings and their Weights'),
         html.Table(id = 'my-weights'),
-        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
+        ],style={'width': '15%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
 ])
 
 
