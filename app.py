@@ -23,7 +23,7 @@ def Model_Display(total_value, reason):
         x = 0
         outputlist = []
         while x < len(df['Holdings']):
-            outputlist.append((df['Holdings'][x], "   ", df['Weights'][x]))
+            outputlist.append((df['Holdings'][x], ":             ", df['Weights'][x]))
             x = x + 1
         return outputlist
     df['Dollar Allocation'] = df['Weights']*total_value
@@ -62,7 +62,8 @@ def Model_Display(total_value, reason):
         king = ('Portfolio Performance of 10K Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
-        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1000, height = 700)
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
+        fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
     return
 
