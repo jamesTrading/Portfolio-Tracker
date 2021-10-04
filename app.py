@@ -49,7 +49,7 @@ def Model_Display(total_value):
         count1 = count1 + 1
     df1['Portfolio'] = portfolio_value
     df1['Market'] = market_portfolio
-    df1 = df1.bfill(axis ='columns')
+    df1 = df1.bfill(axis ='rows')
     fig = go.Figure()
     king = ('Portfolio Performance Over 2 Years')
     fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
