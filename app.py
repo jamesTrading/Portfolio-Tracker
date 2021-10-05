@@ -37,16 +37,28 @@ def Model_Display(total_value, reason):
         df1[h][0] = df2['Adj Close'][1]
         amount_of_shares.append(df['Dollar Allocation'][count]/df1[h][0])
         count = count + 1
-    market = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    united = total_value/market['Adj Close'][0]
-    market_portfolio = []
+    market1 = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    united1 = total_value/market1['Adj Close'][0]
+    market2 = yf.download("QQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    united2 = total_value/market2['Adj Close'][0]
+    market3 = yf.download("IOZ.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    united3 = total_value/market3['Adj Close'][0]
+    market4 = yf.download("VTS.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    united4 = total_value/market4['Adj Close'][0]
+    market_portfolio1 = []
+    market_portfolio2 = []
+    market_portfolio3 = []
+    market_portfolio4 = []
     df['Units'] = amount_of_shares
     count1 = 0
     count2 = 0
     portfolio_value = []
     quick_sum = 0
     while count1 < len(df1[df['Holdings'][0]]):
-        market_portfolio.append(united*market['Adj Close'][count1])
+        market_portfolio1.append(united1*market1['Adj Close'][count1])
+        market_portfolio2.append(united2*market2['Adj Close'][count1])
+        market_portfolio3.append(united3*market3['Adj Close'][count1])
+        market_portfolio4.append(united4*market4['Adj Close'][count1])
         count2 = 0
         quick_sum = 0
         while count2 < len(df['Holdings']):
@@ -55,13 +67,19 @@ def Model_Display(total_value, reason):
         portfolio_value.append(round(quick_sum,2))
         count1 = count1 + 1
     df1['Portfolio'] = portfolio_value
-    df1['Market'] = market_portfolio
+    df1['Market1'] = market_portfolio1
+    df1['Market2'] = market_portfolio2
+    df1['Market3'] = market_portfolio3
+    df1['Market4'] = market_portfolio4
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
         fig = go.Figure()
         king = ('Portfolio Performance of 10K Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="red")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="red")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="red")))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
