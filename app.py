@@ -109,6 +109,7 @@ def Model_Display(total_value, reason, rows):
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
         df4['Marktet'] = market
+        print(df4)
         return df4
     return
 
