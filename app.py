@@ -111,8 +111,6 @@ def Model_Display(total_value, reason, rows):
         return fig
     return
 
-df = pd.read_csv('PortfolioModelJames.csv')
-
 #this creates the app -- imports the stylesheet
 app = dash.Dash(__name__,meta_tags=[{'property':'og:image','content':'https://i.ibb.co/P5RkK55/James-Charge-1.png'}])
 server = app.server
