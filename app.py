@@ -111,13 +111,6 @@ app.layout = html.Div([
     html.Div([
         html.A("Link to Stock/ETF Trading dashboard", href='https://trading-dash.herokuapp.com/', target="_blank")
         ],style={'width': '65%','display': 'inline-block'}),
-    #breaking it down this way means so far there will be 2 sections to the app
-    html.Div([
-        html.H4('Portfolio Model Implementation and Performance'),
-        dcc.Input(id='totalvalue', value=10000, type='number', debounce=True),
-        html.Button('Submit', id='btn-nclicks-1', n_clicks=0),
-        dcc.Graph(id='my-graph')
-        ],style={'width': '60%','display': 'inline-block'}),
     html.Div([
         html.H4('Holdings and their Weights'),
         html.Table(id = 'my-weights'),
@@ -125,7 +118,14 @@ app.layout = html.Div([
     html.Div([
         html.H4('Returns of the Portfolio'),
         html.Table(id = 'my-returns'),
-        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
+        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+    #breaking it down this way means so far there will be 2 sections to the app
+    html.Div([
+        html.H4('Portfolio Model Implementation and Performance'),
+        dcc.Input(id='totalvalue', value=10000, type='number', debounce=True),
+        html.Button('Submit', id='btn-nclicks-1', n_clicks=0),
+        dcc.Graph(id='my-graph')
+        ],style={'width': '60%','display': 'inline-block'})
 ])
 
 
