@@ -161,14 +161,14 @@ def update_graph(totalvalue, rows):
 
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-returns','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data'),State('datatable-upload', 'filename')])
+@app.callback(Output('my-returns','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_returns(totalvalue, rows):
     outputlist = Model_Display(totalvalue, 'returns', rows)
     # Header
     return [html.Tr(html.Td(output)) for output in outputlist]
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data'),State('datatable-upload', 'filename')])
+@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_market(totalvalue, rows):
     outputlist = Model_Display(totalvalue, 'returns', rows)
     # Header
