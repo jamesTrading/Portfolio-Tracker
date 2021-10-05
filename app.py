@@ -77,9 +77,9 @@ def Model_Display(total_value, reason):
         king = ('Portfolio Performance of 10K Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="red")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="red")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="red")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="green")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="purple")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="orange")))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
