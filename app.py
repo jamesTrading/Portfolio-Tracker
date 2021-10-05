@@ -121,10 +121,8 @@ app.layout = html.Div([
     html.Div([
         html.H4('Holdings and their Weights'),
         html.Table(id = 'my-weights'),
-        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
-    html.Div([
         html.H4('Returns of the Portfolio'),
-        html.Table(id = 'my-returns'),
+        html.Table(id = 'my-returns')
         ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
 ])
 
