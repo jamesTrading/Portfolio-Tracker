@@ -109,11 +109,9 @@ def Model_Display(total_value, reason, rows):
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
         df4['Marktet'] = market
-        print(df4)
         return df4
     return
 
-df = pd.read_csv('PortfolioModelJames.csv')
 
 #this creates the app -- imports the stylesheet
 app = dash.Dash(__name__,meta_tags=[{'property':'og:image','content':'https://i.ibb.co/P5RkK55/James-Charge-1.png'}])
@@ -185,6 +183,7 @@ def update_output(contents, filename):
     if contents is None:
         return [{}], []
     df = parse_contents(contents, filename)
+    print(df)
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 
