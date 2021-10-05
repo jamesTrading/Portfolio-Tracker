@@ -161,7 +161,7 @@ def update_graph(totalvalue, rows):
 
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-returns','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
+@app.callback(Output('my-returns','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data'),State('datatable-upload', 'filename'))])
 def update_returns(totalvalue, rows):
     if contents is None:
         return [{}], []
@@ -170,7 +170,7 @@ def update_returns(totalvalue, rows):
     return [html.Tr(html.Td(output)) for output in outputlist]
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
+@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data'),State('datatable-upload', 'filename'))])
 def update_market(totalvalue, rows):
     if contents is None:
         return [{}], []
