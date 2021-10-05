@@ -35,13 +35,6 @@ def parse_contents(contents, filename):
 
 def Model_Display(total_value, reason, rows):
     df = pd.DataFrame(rows)
-    if reason == 'weights':
-        x = 0
-        outputlist = []
-        while x < len(df['Holdings']):
-            outputlist.append((df['Holdings'][x], ":             ", df['Weights'][x]))
-            x = x + 1
-        return outputlist
     df['Dollar Allocation'] = df['Weights']*total_value
     df1 = pd.DataFrame()
     amount_of_shares = []
@@ -108,6 +101,15 @@ def Model_Display(total_value, reason, rows):
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
+    if reason == 'market':
+        df4 = pd.DataFrame()
+        measures = ['Best Month','Worst Month','Avg. Gain in Up','Avg. Loss in Down','Positive Months','Downside Deviation','Worst 1 Day']
+        portfolio = [0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+        market = [1,2,3,4,5,6,7]
+        df4['Measures'] = measures
+        df4['Portfolio'] = portfolio
+        df4['Marktet'] = market
+        return df4
     return
 
 df = pd.read_csv('PortfolioModelJames.csv')
@@ -148,7 +150,7 @@ app.layout = html.Div([
         ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Market Measures'),
-        html.Table(id = 'my-market')
+        dash_table.DataTable(id='datatable-market-container'),
         ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
 ])
 
@@ -168,11 +170,11 @@ def update_returns(totalvalue, rows):
     return [html.Tr(html.Td(output)) for output in outputlist]
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
+@app.callback(Output('datatable-market-container','columns'),Output('datatable-market-container', 'data'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_market(totalvalue, rows):
-    outputlist = Model_Display(totalvalue, 'returns', rows)
+    df = Model_Display(totalvalue, 'market', rows)
     # Header
-    return [html.Tr(html.Td(output)) for output in outputlist]
+    return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 @app.callback(Output('datatable-upload-container', 'data'),
               Output('datatable-upload-container', 'columns'),
