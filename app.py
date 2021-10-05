@@ -67,6 +67,15 @@ def Model_Display(total_value, reason):
         portfolio_value.append(round(quick_sum,2))
         count1 = count1 + 1
     df1['Portfolio'] = portfolio_value
+    if reason == 'returns':
+        outputlist = []
+        Month1 = round(((df1['Portfolio'][len(df1['Portfolio'])-1] - df1['Portfolio'][len(df1['Portfolio'])-22])/df1['Portfolio'][len(df1['Portfolio'])-22])*100,3)
+        Month3 = round(((df1['Portfolio'][len(df1['Portfolio'])-1] - df1['Portfolio'][len(df1['Portfolio'])-63])/df1['Portfolio'][len(df1['Portfolio'])-63])*100,3)
+        Month12 = round(((df1['Portfolio'][len(df1['Portfolio'])-1] - df1['Portfolio'][len(df1['Portfolio'])-252])/df1['Portfolio'][len(df1['Portfolio'])-252])*100,3)
+        outputlist.append(("1 Month Portfolio Return: ",Month1, "%"))
+        outputlist.append(("3 Month Portfolio Return: ",Month3, "%"))
+        outputlist.append(("1 Year Portfolio Return: ",Month12, "%"))
+        return outputlist        
     df1['Market1'] = market_portfolio1
     df1['Market2'] = market_portfolio2
     df1['Market3'] = market_portfolio3
@@ -112,6 +121,10 @@ app.layout = html.Div([
     html.Div([
         html.H4('Holdings and their Weights'),
         html.Table(id = 'my-weights'),
+        ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+    html.Div([
+        html.H4('Returns of the Portfolio'),
+        html.Table(id = 'my-returns'),
         ],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'})
 ])
 
@@ -126,6 +139,13 @@ def update_graph(totalvalue):
 @app.callback(Output('my-weights','children'),[Input('totalvalue','value')])
 def update_weights(totalvalue):
     outputlist = Model_Display(totalvalue, 'weights')
+    # Header
+    return [html.Tr(html.Td(output)) for output in outputlist]
+
+#This app callback updates the graph as per the relevant company
+@app.callback(Output('my-returns','children'),[Input('totalvalue','value')])
+def update_returns(totalvalue):
+    outputlist = Model_Display(totalvalue, 'returns')
     # Header
     return [html.Tr(html.Td(output)) for output in outputlist]
 
