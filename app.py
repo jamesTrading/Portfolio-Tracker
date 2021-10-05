@@ -111,6 +111,8 @@ def Model_Display(total_value, reason, rows):
         return fig
     return
 
+df = pd.read_csv('PortfolioModelJames.csv')
+
 #this creates the app -- imports the stylesheet
 app = dash.Dash(__name__,meta_tags=[{'property':'og:image','content':'https://i.ibb.co/P5RkK55/James-Charge-1.png'}])
 server = app.server
@@ -162,6 +164,8 @@ def update_graph(totalvalue, rows):
 #This app callback updates the graph as per the relevant company
 @app.callback(Output('my-returns','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_returns(totalvalue, rows):
+    if contents is None:
+        return [{}], []
     outputlist = Model_Display(totalvalue, 'returns', rows)
     # Header
     return [html.Tr(html.Td(output)) for output in outputlist]
@@ -169,6 +173,8 @@ def update_returns(totalvalue, rows):
 #This app callback updates the graph as per the relevant company
 @app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_market(totalvalue, rows):
+    if contents is None:
+        return [{}], []
     outputlist = Model_Display(totalvalue, 'returns', rows)
     # Header
     return [html.Tr(html.Td(output)) for output in outputlist]
