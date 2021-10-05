@@ -172,6 +172,7 @@ def update_returns(totalvalue, rows):
 @app.callback(Output('datatable-market-container','columns'),Output('datatable-market-container', 'data'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_market(totalvalue, rows):
     df = Model_Display(totalvalue, 'market', rows)
+    print(df)
     # Header
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
