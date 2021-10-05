@@ -35,7 +35,6 @@ def parse_contents(contents, filename):
 
 def Model_Display(total_value, reason, rows):
     df = pd.DataFrame(rows)
-    print(df)
     if reason == 'weights':
         x = 0
         outputlist = []
