@@ -33,12 +33,12 @@ def Model_Display(total_value, reason):
     for h in df['Holdings']:
         data = yf.download(h,start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
         df2 = pd.DataFrame(data)
-        df1[h] = df2['Close']
-        df1[h][0] = df2['Close'][1]
+        df1[h] = df2['Adj Close']
+        df1[h][0] = df2['Adj Close'][1]
         amount_of_shares.append(df['Dollar Allocation'][count]/df1[h][0])
         count = count + 1
     market = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    united = total_value/market['Close'][0]
+    united = total_value/market['Adj Close'][0]
     market_portfolio = []
     df['Units'] = amount_of_shares
     count1 = 0
