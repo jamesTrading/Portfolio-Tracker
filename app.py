@@ -157,12 +157,12 @@ def Model_Display(total_value, reason, rows):
         m2.append(round(min(df1['M2 Ret']),3))
         m3.append(round(min(df1['M3 Ret']),3))
         m4.append(round(min(df1['M4 Ret']),3))
-        x = 0
-        DD_P = []
-        DD_M1 = []
-        DD_M2 = []
-        DD_M3 = []
-        DD_M4 = []
+        x = 1
+        DD_P = [0]
+        DD_M1 = [0]
+        DD_M2 = [0]
+        DD_M3 = [0]
+        DD_M4 = [0]
         while x < len(df1['P Ret']):
             MaxP = max(df1['Portfolio'][0:x])
             MaxM1 = max(df1['Market1'][0:x])
