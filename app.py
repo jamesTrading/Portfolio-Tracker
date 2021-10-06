@@ -126,7 +126,7 @@ def Model_Display(total_value, reason, rows):
     df1['M3 Ret'] = m3_ret
     df1['M4 Ret'] = m4_ret
     if reason == 'market':
-        measures = ['Best Month','Worst Month','Downside Deviation','Worst 1 Day']
+        measures = ['Best Month','Worst Month','Downside Deviation','Worst 1 Day', 'Maximum Drawdown']
         df1['P Month'] = df1.rolling(window=21).sum()['P Ret']
         df1['M1 Month'] = df1.rolling(window=21).sum()['M1 Ret']
         df1['M2 Month'] = df1.rolling(window=21).sum()['M2 Ret']
@@ -157,6 +157,28 @@ def Model_Display(total_value, reason, rows):
         m2.append(round(min(df1['M2 Ret']),3))
         m3.append(round(min(df1['M3 Ret']),3))
         m4.append(round(min(df1['M4 Ret']),3))
+        x = 0
+        DD_P = []
+        DD_M1 = []
+        DD_M2 = []
+        DD_M3 = []
+        DD_M4 = []
+        while x < len(df1['P Ret']):
+            MaxP = max(df1['Portfolio'][0:x])
+            MaxM1 = max(df1['Market1'][0:x])
+            MaxM2 = max(df1['Market2'][0:x])
+            MaxM3 = max(df1['Market3'][0:x])
+            MaxM4 = max(df1['Market4'][0:x])
+            DD_P.append((df1['Portfolio'][x]-MaxP)/MaxP)
+            DD_M1.append((df1['Market1'][x]-MaxM1)/MaxM1)
+            DD_M2.append((df1['Market2'][x]-MaxM2)/MaxM2)
+            DD_M3.append((df1['Market3'][x]-MaxM3)/MaxM3)
+            DD_M4.append((df1['Market4'][x]-MaxM4)/MaxM4)
+        portfolio.append(round(min(DD_P),3))
+        m1.append(round(min(DD_M1),3))
+        m2.append(round(min(DD_M2),3))
+        m3.append(round(min(DD_M3),3))
+        m4.append(round(min(DD_M4),3))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
         df4['S&P 500'] = m1
