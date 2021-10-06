@@ -165,8 +165,13 @@ def Model_Display(total_value, reason, rows):
         df4['US Total'] = m4
         return df4
     if reason == 'risk':
-        measures = ['Annual Volatility','Sharpe Ratio', 'Sortino Ratio']
+        measures = ['Annual Return','Annual Volatility','Sharpe Ratio', 'Sortino Ratio']
         df4['Measures'] = measures
+        portfolio.append(round(df1['P Ret'].mean()*252,3))
+        m1.append(round(df1['M1 Ret'].mean()*252,3))
+        m2.append(round(df1['M2 Ret'].mean()*252,3))
+        m3.append(round(df1['M3 Ret'].mean()*252,3))
+        m4.append(round(df1['M4 Ret'].mean()*252,3))
         df1['P Volatility'] = df1['P Ret'].rolling(window=252).std()
         df1['P Annual_Volatility'] = (df1['P Volatility'])*(252**(1/2))
         df1['M1 Volatility'] = df1['M1 Ret'].rolling(window=252).std()
@@ -183,7 +188,6 @@ def Model_Display(total_value, reason, rows):
         m3.append(round(df1['M3 Annual_Volatility'][len(df1['M3 Annual_Volatility'])-1],3))
         m4.append(round(df1['M4 Annual_Volatility'][len(df1['M4 Annual_Volatility'])-1],3))
         portfolio.append(round(((df1['P Ret'].mean()*252-0.02)/(df1['P Ret'].std()*(252**(1/2)))),3))
-        print(df1['P Ret'].mean())
         m1.append(round(((df1['M1 Ret'].mean()*252-0.02)/(df1['M1 Ret'].std()*(252**(1/2)))),3))
         m2.append(round(((df1['M2 Ret'].mean()*252-0.02)/(df1['M2 Ret'].std()*(252**(1/2)))),3))
         m3.append(round(((df1['M3 Ret'].mean()*252-0.02)/(df1['M3 Ret'].std()*(252**(1/2)))),3))
