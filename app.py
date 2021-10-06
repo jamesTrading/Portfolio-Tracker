@@ -174,6 +174,7 @@ def Model_Display(total_value, reason, rows):
             DD_M2.append((df1['Market2'][x]-MaxM2)/MaxM2)
             DD_M3.append((df1['Market3'][x]-MaxM3)/MaxM3)
             DD_M4.append((df1['Market4'][x]-MaxM4)/MaxM4)
+            x = x + 1
         portfolio.append(round(min(DD_P),3))
         m1.append(round(min(DD_M1),3))
         m2.append(round(min(DD_M2),3))
