@@ -309,6 +309,7 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
+    fig.update_layout(width=600, height = 500)
     return fig
 
 
