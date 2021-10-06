@@ -226,24 +226,6 @@ def Model_Display(total_value, reason, rows):
     return
 
 
-def Sectors_Analysis(rows):
-    df = pd.DataFrame(rows)
-    counter = 0
-    Industry = []
-    Weight = []
-    for h in df['Holdings']:
-        Code = yf.Ticker(h)
-        if Code.info['quoteType'] == 'EQUITY':
-            Industry.append(Code.info['industry'])
-            Weight.append(df['Weights'][counter])
-        else:
-            Industry.append(('Broad Index',Code.info['market']))
-            Weight.append(df['Weights'][counter])
-        counter = counter + 1
-    fig = go.Figure(data=[go.Pie(labels=Industry, values=Weight)])
-    return fig
-
-
 #this creates the app -- imports the stylesheet
 app = dash.Dash(__name__,meta_tags=[{'property':'og:image','content':'https://i.ibb.co/P5RkK55/James-Charge-1.png'}])
 server = app.server
@@ -274,7 +256,7 @@ app.layout = html.Div([
         dash_table.DataTable(id='datatable-upload-container')],style={'width': '20%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Holdings and Weights Visualised'),
-        dcc.Graph(id='my-sectors')
+        dcc.Graph(id='datatable-upload-graph')
         ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Market Measures'),
@@ -320,10 +302,26 @@ def update_output(contents, filename):
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 
-@app.callback(Output('my-sectors', 'figure'),Input('datatable-upload-container', 'data'))
+@app.callback(Output('datatable-upload-graph', 'figure'),
+              Input('datatable-upload-container', 'data'))
 def display_graph(rows):
-    fig = Sectors_Analysis(rows)
-    return fig
+    df = pd.DataFrame(rows)
+
+    if (df.empty or len(df.columns) < 1):
+        return {
+            'data': [{
+                'x': [],
+                'y': [],
+                'type': 'bar'
+            }]
+        }
+    return {
+        'data': [{
+            'x': df[df.columns[0]],
+            'y': df[df.columns[1]],
+            'type': 'bar'
+        }]
+    }
 
 
 if __name__ == '__main__':
