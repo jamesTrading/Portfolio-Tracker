@@ -108,7 +108,7 @@ def Model_Display(total_value, reason, rows):
         df1['buy']= 20
         df1['sell'] = 80
         fig = go.Figure()
-        king = ('RSI  - '+ CompanyCode)
+        king = ('RSI Chart')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['RSI'], mode = 'lines',marker=dict(size=1, color="blue"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['buy'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['sell'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
@@ -291,11 +291,11 @@ app.layout = html.Div([
     html.Div([
         html.H4('MACD Chart'),
         dcc.Graph(id='my-MACD')
-        ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+        ],style={'width': '45%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('RSI Chart'),
         dcc.Graph(id='my-RSI')
-        ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+        ],style={'width': '45%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     
 ])
 
