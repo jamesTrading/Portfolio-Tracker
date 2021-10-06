@@ -182,22 +182,22 @@ def Model_Display(total_value, reason, rows):
         m2.append(round(df1['M2 Annual_Volatility'][len(df1['M2 Annual_Volatility'])-1],3))
         m3.append(round(df1['M3 Annual_Volatility'][len(df1['M3 Annual_Volatility'])-1],3))
         m4.append(round(df1['M4 Annual_Volatility'][len(df1['M4 Annual_Volatility'])-1],3))
-        portfolio.append(round(((df1['P Ret'].mean()-0.02)/df1['P Ret'].std()),3))
+        portfolio.append(round(((df1['P Ret'].mean()*252-0.02)/(df1['P Ret'].std()*(252^(1/2)))),3))
         print(df1['P Ret'].mean())
-        m1.append(round(((df1['M1 Ret'].mean()-0.02)/df1['M1 Ret'].std()),3))
-        m2.append(round(((df1['M2 Ret'].mean()-0.02)/df1['M2 Ret'].std()),3))
-        m3.append(round(((df1['M3 Ret'].mean()-0.02)/df1['M3 Ret'].std()),3))
-        m4.append(round(((df1['M4 Ret'].mean()-0.02)/df1['M4 Ret'].std()),3))
+        m1.append(round(((df1['M1 Ret'].mean()*252-0.02)/(df1['M1 Ret'].std()*(252^(1/2)))),3))
+        m2.append(round(((df1['M2 Ret'].mean()*252-0.02)/(df1['M2 Ret'].std()*(252^(1/2)))),3))
+        m3.append(round(((df1['M3 Ret'].mean()*252-0.02)/(df1['M3 Ret'].std()*(252^(1/2)))),3))
+        m4.append(round(((df1['M4 Ret'].mean()*252-0.02)/(df1['M4 Ret'].std()*(252^(1/2)))),3))
         dfp = df1.loc[df1['P Ret']<0]
-        portfolio.append(round((df1['P Ret'].mean()-0.02)/dfp['P Ret'].std(),3))
+        portfolio.append(round((df1['P Ret'].mean()*252-0.02)/(dfp['P Ret'].std()*(252^(1/2))),3))
         dfm1 = df1.loc[df1['M1 Ret']<0]
-        m1.append(round((df1['M1 Ret'].mean()-0.02)/dfm1['M1 Ret'].std(),3))
+        m1.append(round((df1['M1 Ret'].mean()*252-0.02)/(dfm1['M1 Ret'].std()*(252^(1/2))),3))
         dfm2 = df1.loc[df1['M2 Ret']<0]
-        m2.append(round((df1['M2 Ret'].mean()-0.02)/dfm2['M2 Ret'].std(),3))
+        m2.append(round((df1['M2 Ret'].mean()*252-0.02)/(dfm2['M2 Ret'].std()*(252^(1/2))),3))
         dfm3 = df1.loc[df1['M3 Ret']<0]
-        m3.append(round((df1['M3 Ret'].mean()-0.02)/dfm3['M3 Ret'].std(),3))
+        m3.append(round((df1['M3 Ret'].mean()*252-0.02)/(dfm3['M3 Ret'].std()*(252^(1/2))),3))
         dfm4 = df1.loc[df1['M4 Ret']<0]
-        m4.append(round((df1['M4 Ret'].mean()-0.02)/dfm4['M4 Ret'].std(),3))
+        m4.append(round((df1['M4 Ret'].mean()*252-0.02)/(dfm4['M4 Ret'].std()*(252^(1/2))),3))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
         df4['S&P 500'] = m1
@@ -291,7 +291,6 @@ def update_output(contents, filename):
     if contents is None:
         return [{}], []
     df = parse_contents(contents, filename)
-    print(df)
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 
