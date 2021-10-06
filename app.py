@@ -103,12 +103,61 @@ def Model_Display(total_value, reason, rows):
         return fig
     if reason == 'market':
         df4 = pd.DataFrame()
-        measures = ['Best Month','Worst Month','Avg. Gain in Up','Avg. Loss in Down','Positive Months','Downside Deviation','Worst 1 Day']
-        portfolio = [0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-        market = [1,2,3,4,5,6,7]
+        portfolio = []
+        m1 = []
+        m2 = []
+        m3 = []
+        m4 = []
+        measures = ['Best Month','Worst Month','Downside Deviation','Worst 1 Day']
+        x = 1
+        p_ret = [0]
+        m1_ret = [0]
+        m2_ret = [0]
+        m3_ret = [0]
+        m4_ret = [0]
+        while x < len(df1['Portfolio']):
+            p_ret.append((df1['Portfolio'][x]-df1['Portfolio'][x-1])/df1['Portfolio'][x-1])
+            m1_ret.append((df1['Market1'][x]-df1['Market1'][x-1])/df1['Market1'][x-1])
+            m2_ret.append((df1['Market2'][x]-df1['Market2'][x-1])/df1['Market2'][x-1])
+            m3_ret.append((df1['Market3'][x]-df1['Market3'][x-1])/df1['Market3'][x-1])
+            m4_ret.append((df1['Market4'][x]-df1['Market4'][x-1])/df1['Market4'][x-1])
+            x = x + 1
+        df1['P Ret'] = p_ret
+        df1['M1 Ret'] = m1_ret
+        df1['M2 Ret'] = m2_ret
+        df1['M3 Ret'] = m3_ret
+        df1['M4 Ret'] = m4_ret
+        df1['P Month'] = df1.rolling(window=21).sum()['P Ret']
+        df1['M1 Month'] = df1.rolling(window=21).sum()['M1 Ret']
+        df1['M2 Month'] = df1.rolling(window=21).sum()['M2 Ret']
+        df1['M3 Month'] = df1.rolling(window=21).sum()['M3 Ret']
+        df1['M4 Month'] = df1.rolling(window=21).sum()['M4 Ret']
+        portfolio.append(round(max(df1['P Month']),2))
+        m1.append(round(max(df1['M1 Month']),2))
+        m2.append(round(max(df1['M2 Month']),2))
+        m3.append(round(max(df1['M3 Month']),2))
+        m4.append(round(max(df1['M4 Month']),2))
+        portfolio.append(round(min(df1['P Month']),2))
+        m1.append(round(min(df1['M1 Month']),2))
+        m2.append(round(min(df1['M2 Month']),2))
+        m3.append(round(min(df1['M3 Month']),2))
+        m4.append(round(min(df1['M4 Month']),2))
+        portfolio.append(df1.loc[df1['P Ret']<0].std())
+        m1.append(df1.loc[df1['M1 Ret']<0].std())
+        m2.append(df1.loc[df1['M2 Ret']<0].std())
+        m3.append(df1.loc[df1['M3 Ret']<0].std())
+        m4.append(df1.loc[df1['M4 Ret']<0].std())
+        portfolio.append(round(min(df1['P Ret']),2))
+        m1.append(round(min(df1['M1 Ret']),2))
+        m2.append(round(min(df1['M2 Ret']),2))
+        m3.append(round(min(df1['M3 Ret']),2))
+        m4.append(round(min(df1['M4 Ret']),2))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
-        df4['Marktet'] = market
+        df4['S&P 500'] = m1
+        df4['Nasdaq'] = m2
+        df4['ASX 200'] = m3
+        df4['US Total'] = m4
         return df4
     return
 
@@ -149,7 +198,7 @@ app.layout = html.Div([
         ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Market Measures'),
-        dash_table.DataTable(id='datatable-market-container'),
+        html.Table(id = 'my-market'),
         ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
 ])
 
@@ -169,12 +218,11 @@ def update_returns(totalvalue, rows):
     return [html.Tr(html.Td(output)) for output in outputlist]
 
 #This app callback updates the graph as per the relevant company
-@app.callback(Output('datatable-market-container','columns'),Output('datatable-market-container', 'data'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
+@app.callback(Output('my-market','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
 def update_market(totalvalue, rows):
-    df = Model_Display(totalvalue, 'market', rows)
-    print(df)
+    table = Model_Display(totalvalue, 'market', rows)
     # Header
-    return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'20px'})
 
 @app.callback(Output('datatable-upload-container', 'data'),
               Output('datatable-upload-container', 'columns'),
