@@ -101,32 +101,32 @@ def Model_Display(total_value, reason, rows):
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
+    df4 = pd.DataFrame()
+    portfolio = []
+    m1 = []
+    m2 = []
+    m3 = []
+    m4 = []
+    x = 1
+    p_ret = [0]
+    m1_ret = [0]
+    m2_ret = [0]
+    m3_ret = [0]
+    m4_ret = [0]
+    while x < len(df1['Portfolio']):
+        p_ret.append((df1['Portfolio'][x]-df1['Portfolio'][x-1])/df1['Portfolio'][x-1])
+        m1_ret.append((df1['Market1'][x]-df1['Market1'][x-1])/df1['Market1'][x-1])
+        m2_ret.append((df1['Market2'][x]-df1['Market2'][x-1])/df1['Market2'][x-1])
+        m3_ret.append((df1['Market3'][x]-df1['Market3'][x-1])/df1['Market3'][x-1])
+        m4_ret.append((df1['Market4'][x]-df1['Market4'][x-1])/df1['Market4'][x-1])
+        x = x + 1
+    df1['P Ret'] = p_ret
+    df1['M1 Ret'] = m1_ret
+    df1['M2 Ret'] = m2_ret
+    df1['M3 Ret'] = m3_ret
+    df1['M4 Ret'] = m4_ret
     if reason == 'market':
-        df4 = pd.DataFrame()
-        portfolio = []
-        m1 = []
-        m2 = []
-        m3 = []
-        m4 = []
         measures = ['Best Month','Worst Month','Downside Deviation','Worst 1 Day']
-        x = 1
-        p_ret = [0]
-        m1_ret = [0]
-        m2_ret = [0]
-        m3_ret = [0]
-        m4_ret = [0]
-        while x < len(df1['Portfolio']):
-            p_ret.append((df1['Portfolio'][x]-df1['Portfolio'][x-1])/df1['Portfolio'][x-1])
-            m1_ret.append((df1['Market1'][x]-df1['Market1'][x-1])/df1['Market1'][x-1])
-            m2_ret.append((df1['Market2'][x]-df1['Market2'][x-1])/df1['Market2'][x-1])
-            m3_ret.append((df1['Market3'][x]-df1['Market3'][x-1])/df1['Market3'][x-1])
-            m4_ret.append((df1['Market4'][x]-df1['Market4'][x-1])/df1['Market4'][x-1])
-            x = x + 1
-        df1['P Ret'] = p_ret
-        df1['M1 Ret'] = m1_ret
-        df1['M2 Ret'] = m2_ret
-        df1['M3 Ret'] = m3_ret
-        df1['M4 Ret'] = m4_ret
         df1['P Month'] = df1.rolling(window=21).sum()['P Ret']
         df1['M1 Month'] = df1.rolling(window=21).sum()['M1 Ret']
         df1['M2 Month'] = df1.rolling(window=21).sum()['M2 Ret']
@@ -157,6 +157,46 @@ def Model_Display(total_value, reason, rows):
         m2.append(round(min(df1['M2 Ret']),3))
         m3.append(round(min(df1['M3 Ret']),3))
         m4.append(round(min(df1['M4 Ret']),3))
+        df4['Measures'] = measures
+        df4['Portfolio'] = portfolio
+        df4['S&P 500'] = m1
+        df4['Nasdaq'] = m2
+        df4['ASX 200'] = m3
+        df4['US Total'] = m4
+        return df4
+    if reason == 'risk':
+        measures = ['Annual Volatility','Sharpe Ratio', 'Sortino Ratio']
+        df4['Measures'] = measures
+        df1['P Volatility'] = df1['P Ret'].rolling(window=252).std()
+        df1['P Annual_Volatility'] = (df1['P Volatility'])*(252**(1/2))
+        df1['M1 Volatility'] = df1['M1 Ret'].rolling(window=252).std()
+        df1['M1 Annual_Volatility'] = (df1['M1 Volatility'])*(252**(1/2))
+        df1['M2 Volatility'] = df1['M2 Ret'].rolling(window=252).std()
+        df1['M2 Annual_Volatility'] = (df1['M2 Volatility'])*(252**(1/2))
+        df1['M3 Volatility'] = df1['M3 Ret'].rolling(window=252).std()
+        df1['M3 Annual_Volatility'] = (df1['M3 Volatility'])*(252**(1/2))
+        df1['M4 Volatility'] = df1['M4 Ret'].rolling(window=252).std()
+        df1['M4 Annual_Volatility'] = (df1['M4 Volatility'])*(252**(1/2))
+        portfolio.append(round(df1['P Annual_Volatility'][len(df1['P Annual_Volatility'])-1],3))
+        m1.append(round(df1['M1 Annual_Volatility'][len(df1['M1 Annual_Volatility'])-1],3))
+        m2.append(round(df1['M2 Annual_Volatility'][len(df1['M2 Annual_Volatility'])-1],3))
+        m3.append(round(df1['M3 Annual_Volatility'][len(df1['M3 Annual_Volatility'])-1],3))
+        m4.append(round(df1['M4 Annual_Volatility'][len(df1['M4 Annual_Volatility'])-1],3))
+        portfolio.append(round(((df1['P Ret'].mean()-0.02)/df1['P Ret'].std()),3))
+        m1.append(round(((df1['M1 Ret'].mean()-0.02)/df1['M1 Ret'].std()),3))
+        m2.append(round(((df1['M2 Ret'].mean()-0.02)/df1['M2 Ret'].std()),3))
+        m3.append(round(((df1['M3 Ret'].mean()-0.02)/df1['M3 Ret'].std()),3))
+        m4.append(round(((df1['M4 Ret'].mean()-0.02)/df1['M4 Ret'].std()),3))
+        dfp = df1.loc[df1['P Ret']<0]
+        portfolio.append(round((df1['P Ret'].mean()-0.02)/dfp['P Ret'].std(),3))
+        dfm1 = df1.loc[df1['M1 Ret']<0]
+        m1.append(round((df1['M1 Ret'].mean()-0.02)/dfm1['M1 Ret'].std(),3))
+        dfm2 = df1.loc[df1['M2 Ret']<0]
+        m2.append(round((df1['M2 Ret'].mean()-0.02)/dfm2['M2 Ret'].std(),3))
+        dfm3 = df1.loc[df1['M3 Ret']<0]
+        m3.append(round((df1['M3 Ret'].mean()-0.02)/dfm3['M3 Ret'].std(),3))
+        dfm4 = df1.loc[df1['M4 Ret']<0]
+        m4.append(round((df1['M4 Ret'].mean()-0.02)/dfm4['M4 Ret'].std(),3))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
         df4['S&P 500'] = m1
@@ -205,6 +245,10 @@ app.layout = html.Div([
         html.H4('Market Measures'),
         html.Table(id = 'my-market'),
         ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+    html.Div([
+        html.H4('Risk and Financial Measures'),
+        html.Table(id = 'my-risk'),
+        ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
 ])
 
 
@@ -228,6 +272,15 @@ def update_market(totalvalue, rows):
     table = Model_Display(totalvalue, 'market', rows)
     # Header
     return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'20px'})
+
+
+#This app callback updates the graph as per the relevant company
+@app.callback(Output('my-risk','children'),[Input('totalvalue','value'),Input('datatable-upload-container', 'data')])
+def update_risk(totalvalue, rows):
+    table = Model_Display(totalvalue, 'risk', rows)
+    # Header
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'20px'})
+
 
 @app.callback(Output('datatable-upload-container', 'data'),
               Output('datatable-upload-container', 'columns'),
