@@ -132,25 +132,26 @@ def Model_Display(total_value, reason, rows):
         df1['M2 Month'] = df1.rolling(window=21).sum()['M2 Ret']
         df1['M3 Month'] = df1.rolling(window=21).sum()['M3 Ret']
         df1['M4 Month'] = df1.rolling(window=21).sum()['M4 Ret']
-        print(df1['P Month'])
-        print(max(df1['P Month'][22:len(df1['P Month'])-1]))
-        portfolio.append(round(max(df1['P Month']),2))
-        m1.append(round(max(df1['M1 Month']),2))
-        m2.append(round(max(df1['M2 Month']),2))
-        m3.append(round(max(df1['M3 Month']),2))
-        m4.append(round(max(df1['M4 Month']),2))
-        portfolio.append(round(min(df1['P Month']),2))
-        m1.append(round(min(df1['M1 Month']),2))
-        m2.append(round(min(df1['M2 Month']),2))
-        m3.append(round(min(df1['M3 Month']),2))
-        m4.append(round(min(df1['M4 Month']),2))
+        portfolio.append(round(max(df1['P Month'][22:len(df1['P Month'])-1]),2))
+        m1.append(round(max(df1['M1 Month'][22:len(df1['P Month'])-1]),2))
+        m2.append(round(max(df1['M2 Month'][22:len(df1['P Month'])-1]),2))
+        m3.append(round(max(df1['M3 Month'][22:len(df1['P Month'])-1]),2))
+        m4.append(round(max(df1['M4 Month'][22:len(df1['P Month'])-1]),2))
+        portfolio.append(round(min(df1['P Month'][22:len(df1['P Month'])-1]),2))
+        m1.append(round(min(df1['M1 Month'][22:len(df1['P Month'])-1]),2))
+        m2.append(round(min(df1['M2 Month'][22:len(df1['P Month'])-1]),2))
+        m3.append(round(min(df1['M3 Month'][22:len(df1['P Month'])-1]),2))
+        m4.append(round(min(df1['M4 Month'][22:len(df1['P Month'])-1]),2))
         dfp = df1.loc[df1['P Ret']<0]
-        print(dfp)
-        portfolio.append(round(dfp.std(),2))
-        m1.append(round(df1.loc[df1['M1 Ret']<0].std(),2))
-        m2.append(round(df1.loc[df1['M2 Ret']<0].std(),2))
-        m3.append(round(df1.loc[df1['M3 Ret']<0].std(),2))
-        m4.append(round(df1.loc[df1['M4 Ret']<0].std(),2))
+        portfolio.append(round(dfp['P Ret'].std(),2))
+        dfm1 = df1.loc[df1['M1 Ret']<0]
+        m1.append(round(dfp['M1 Ret'].std(),2))
+        dfm2 = df1.loc[df1['M2 Ret']<0]
+        m2.append(round(dfp['M2 Ret'].std(),2))
+        dfm3 = df1.loc[df1['M3 Ret']<0]
+        m3.append(round(dfp['M3 Ret'].std(),2))
+        dfm4 = df1.loc[df1['M4 Ret']<0]
+        m4.append(round(dfp['M4 Ret'].std(),2))
         portfolio.append(round(min(df1['P Ret']),2))
         m1.append(round(min(df1['M1 Ret']),2))
         m2.append(round(min(df1['M2 Ret']),2))
