@@ -183,6 +183,7 @@ def Model_Display(total_value, reason, rows):
         m3.append(round(df1['M3 Annual_Volatility'][len(df1['M3 Annual_Volatility'])-1],3))
         m4.append(round(df1['M4 Annual_Volatility'][len(df1['M4 Annual_Volatility'])-1],3))
         portfolio.append(round(((df1['P Ret'].mean()-0.02)/df1['P Ret'].std()),3))
+        print(df1['P Ret'].mean())
         m1.append(round(((df1['M1 Ret'].mean()-0.02)/df1['M1 Ret'].std()),3))
         m2.append(round(((df1['M2 Ret'].mean()-0.02)/df1['M2 Ret'].std()),3))
         m3.append(round(((df1['M3 Ret'].mean()-0.02)/df1['M3 Ret'].std()),3))
