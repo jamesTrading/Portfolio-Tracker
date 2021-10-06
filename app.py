@@ -257,7 +257,7 @@ app.layout = html.Div([
     html.Div([
         html.H4('Holdings and Weights Visualised'),
         dcc.Graph(id='datatable-upload-graph')
-        ],style={'width': '60%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+        ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Market Measures'),
         html.Table(id = 'my-market'),
@@ -306,22 +306,8 @@ def update_output(contents, filename):
               Input('datatable-upload-container', 'data'))
 def display_graph(rows):
     df = pd.DataFrame(rows)
-
-    if (df.empty or len(df.columns) < 1):
-        return {
-            'data': [{
-                'x': [],
-                'y': [],
-                'type': 'pie'
-            }]
-        }
-    return {
-        'data': [{
-            'x': df[df.columns[0]],
-            'y': df[df.columns[1]],
-            'type': 'pie'
-        }]
-    }
+    fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]])])
+    return fig
 
 
 if __name__ == '__main__':
