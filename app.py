@@ -330,7 +330,7 @@ def display_graph(rows):
 @app.callback(Output('my-MACD', 'figure'),
               Input('datatable-upload-container', 'data'))
 def display_MACD(rows):
-    fig = Model_Display(totalvalue, 'MACD', rows)
+    fig = Model_Display(10000, 'MACD', rows)
     return fig
 
 
