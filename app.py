@@ -237,7 +237,7 @@ def Sectors_Analysis(rows):
             Industry.append(Code.info['industry'])
             Weight.append(df['Weights'][counter])
         else:
-            Industry.append('Broad Index',Code.info['country'])
+            Industry.append('Broad Index',Code.info['market'])
             Weight.append(df['Weights'][counter])
         counter = counter + 1
     fig = go.Figure(data=[go.Pie(labels=Industry, values=Weight)])
