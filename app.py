@@ -312,14 +312,14 @@ def display_graph(rows):
             'data': [{
                 'x': [],
                 'y': [],
-                'type': 'bar'
+                'type': 'pie'
             }]
         }
     return {
         'data': [{
             'x': df[df.columns[0]],
             'y': df[df.columns[1]],
-            'type': 'bar'
+            'type': 'pie'
         }]
     }
 
