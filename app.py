@@ -306,7 +306,9 @@ def update_output(contents, filename):
               Input('datatable-upload-container', 'data'))
 def display_graph(rows):
     df = pd.DataFrame(rows)
-    fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]])])
+    fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update(layout_showlegend=False)
     return fig
 
 
