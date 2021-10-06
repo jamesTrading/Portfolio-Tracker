@@ -83,7 +83,7 @@ def Model_Display(total_value, reason, rows):
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
         fig = go.Figure()
-        king = ('Portfolio Performance of 10K Invested 2 Years Ago')
+        king = ('Portfolio Performance of Lump Sum Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="green")))
@@ -91,6 +91,17 @@ def Model_Display(total_value, reason, rows):
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="orange")))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
+        return fig
+    if reason == 'MACD':
+        df1['26 EMA'] = df1.ewm(span = 26, min_periods = 26).mean()['Portfolio']
+        df1['12 EMA'] = df1.ewm(span = 12, min_periods = 12).mean()['Portfolio']
+        df1['MACD'] = df1['12 EMA'] - df1['26 EMA']
+        df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
+        fig = go.Figure()
+        king = ('MACD Chart')
+        fig.add_trace(go.Scatter(x=df1['Date'],y=df1['MACD'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
+        fig.add_trace(go.Scatter(x=df1['Date'],y=df1['Signal Line'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="MACD Value", width=700, height = 550)
         return fig
     df4 = pd.DataFrame()
     portfolio = []
@@ -266,6 +277,11 @@ app.layout = html.Div([
         html.H4('Risk and Financial Measures'),
         html.Table(id = 'my-risk'),
         ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+    html.Div([
+        html.H4('MACD Chart'),
+        dcc.Graph(id='my-MACD')
+        ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+    
 ])
 
 
@@ -309,6 +325,12 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
+    return fig
+
+@app.callback(Output('my-MACD', 'figure'),
+              Input('datatable-upload-container', 'data'))
+def display_MACD(rows):
+    fig = Model_Display(totalvalue, 'MACD', rows)
     return fig
 
 
