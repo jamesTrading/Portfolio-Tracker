@@ -101,7 +101,7 @@ def Model_Display(total_value, reason, rows):
         king = ('MACD Chart')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Signal Line'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
-        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="MACD Value", width=600, height = 450)
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="MACD Value", width=700, height = 500)
         return fig
     if reason == 'RSI':
         df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
@@ -112,7 +112,7 @@ def Model_Display(total_value, reason, rows):
         fig.add_trace(go.Scatter(x=df1.index,y=df1['RSI'], mode = 'lines',marker=dict(size=1, color="blue"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['buy'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['sell'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
-        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="RSI Value", width=600, height = 450)
+        fig.update_layout(title=king,xaxis_title="Time",yaxis_title="RSI Value", width=700, height = 500)
         return fig
     df4 = pd.DataFrame()
     portfolio = []
@@ -340,7 +340,7 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
-    fig.update_layout(width=300, height = 300)
+    fig.update_layout(width=400, height = 400)
     return fig
 
 @app.callback(Output('my-MACD', 'figure'),
