@@ -289,11 +289,9 @@ app.layout = html.Div([
         html.Table(id = 'my-risk'),
         ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
-        html.H4('MACD Chart'),
         dcc.Graph(id='my-MACD')
         ],style={'width': '45%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     html.Div([
-        html.H4('RSI Chart'),
         dcc.Graph(id='my-RSI')
         ],style={'width': '45%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
     
@@ -340,7 +338,7 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
-    fig.update_layout(width=400, height = 400)
+    fig.update_layout(width=380, height = 380)
     return fig
 
 @app.callback(Output('my-MACD', 'figure'),
