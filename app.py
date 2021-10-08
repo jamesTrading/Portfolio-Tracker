@@ -87,6 +87,24 @@ def Model_Display(total_value, reason, rows):
     df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
     df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
     df1['RSI MEAN'] = df1['RSI'].mean()
+    portfolio_advanced = []
+    RSI_protect_price = []
+    MACD_protect_price = []
+    RSI_protect_date = []
+    MACD_protect_date = []
+    x = 3
+    while x < len(df1[df['Holdings'][0]]):
+        if df1['MACD'][x]>df1['MACD MEAN'][x]:
+            if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
+                if (df1['MACD'][x]-df1['Signal Line'][x]) < (df1['MACD'][x-1]-df1['Signal Line'][x-1]) and df1['MACD'][x-1]-df1['Signal Line'][x-1]) > (df1['MACD'][x-2]-df1['Signal Line'][x-2]):
+                    if df1['MACD'][x-2]-df1['Signal Line'][x-2]) > (df1['MACD'][x-3]-df1['Signal Line'][x-3]):
+                        if df1['RSI'][x] > df1['RSI MEAN'][x]:
+                            RSI_protect_price.append(df1['RSI'][x])
+                            MACD_protect_price.append(df1['MACD'][x])
+                            RSI_protect_date.append(df1.index.date[x])
+                            MACD_protect_date.append(df1.index.date[x])
+        
+        x = x + 1
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
         fig = go.Figure()
@@ -102,6 +120,8 @@ def Model_Display(total_value, reason, rows):
     if reason == 'MACD':
         fig = go.Figure()
         king = ('MACD Chart')
+        df4 = pd.DataFrame(data = {'Dates1':MACD_protect_date,'SellPrice1':MACD_protect_price})
+        fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Signal Line'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD MEAN'], mode = 'lines',marker=dict(size=1, color="yellow"),showlegend=False))
@@ -112,6 +132,8 @@ def Model_Display(total_value, reason, rows):
         df1['sell'] = 80
         fig = go.Figure()
         king = ('RSI Chart')
+        df4 = pd.DataFrame(data = {'Dates1':RSI_protect_date,'SellPrice1':RSI_protect_price})
+        fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['RSI'], mode = 'lines',marker=dict(size=1, color="blue"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['buy'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['sell'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
