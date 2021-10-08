@@ -130,7 +130,15 @@ def Model_Display(total_value, reason, rows):
         if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
             if df1['MACD'][x]>df1['MACD'][x]:
                 long_time = 0
-                            
+        if long_time > 0:
+            if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
+                if x - 10 < long_time:
+                    RSI_protect_price.append(df1['RSI'][x])
+                    MACD_protect_price.append(df1['MACD'][x])
+                    RSI_protect_date.append(df1.index.date[x])
+                    MACD_protect_date.append(df1.index.date[x])
+                    short_time = x
+                    long_time = 0        
         x = x + 1
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
