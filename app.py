@@ -92,12 +92,12 @@ def Model_Display(total_value, reason, rows):
     MACD_protect_price = []
     RSI_protect_date = []
     MACD_protect_date = []
-    x = 3
+    x = 4
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
-                if (df1['MACD'][x]-df1['Signal Line'][x]) < (df1['MACD'][x-1]-df1['Signal Line'][x-1]) and (df1['MACD'][x-1]-df1['Signal Line'][x-1]) > (df1['MACD'][x-2]-df1['Signal Line'][x-2]):
-                    if (df1['MACD'][x-2]-df1['Signal Line'][x-2]) > (df1['MACD'][x-3]-df1['Signal Line'][x-3]):
+                if df1['MACD'][x-1]>df1['MACD'][x-2] and df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
+                    if df1['MACD'][x] < df1['MACD'][x-1]:
                         if df1['RSI'][x] > df1['RSI MEAN'][x]:
                             RSI_protect_price.append(df1['RSI'][x])
                             MACD_protect_price.append(df1['MACD'][x])
