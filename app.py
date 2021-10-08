@@ -96,6 +96,10 @@ def Model_Display(total_value, reason, rows):
     MACD_enhance_price = []
     RSI_enhance_date = []
     MACD_enhance_date = []
+    P_enhance_price = []
+    P_enhance_date = []
+    P_protect_price = []
+    P_protect_date = []
     x = 4
     short_time = 0
     long_time = 0
@@ -110,6 +114,8 @@ def Model_Display(total_value, reason, rows):
                                 MACD_protect_price.append(df1['MACD'][x])
                                 RSI_protect_date.append(df1.index.date[x])
                                 MACD_protect_date.append(df1.index.date[x])
+                                P_protect_price.append(df1['Portfolio'][x])
+                                P_protect_date.append(df1.index.date[x])
                                 short_time = x
                                 long_time = 0
         else:
@@ -124,6 +130,8 @@ def Model_Display(total_value, reason, rows):
                                 MACD_enhance_price.append(df1['MACD'][x])
                                 RSI_enhance_date.append(df1.index.date[x])
                                 MACD_enhance_date.append(df1.index.date[x])
+                                P_enhance_price.append(df1['Portfolio'][x])
+                                P_enhance_date.append(df1.index.date[x])
         if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
             if df1['MACD'][x]<df1['Signal Line'][x]:
                 short_time = 0
@@ -137,6 +145,8 @@ def Model_Display(total_value, reason, rows):
                     MACD_protect_price.append(df1['MACD'][x])
                     RSI_protect_date.append(df1.index.date[x])
                     MACD_protect_date.append(df1.index.date[x])
+                    P_protect_price.append(df1['Portfolio'][x])
+                    P_protect_date.append(df1.index.date[x])
                     short_time = x
                     long_time = 0        
         x = x + 1
@@ -145,6 +155,10 @@ def Model_Display(total_value, reason, rows):
         fig = go.Figure()
         king = ('Portfolio Performance of Lump Sum Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
+        df4 = pd.DataFrame(data = {'Dates1':P_protect_date,'SellPrice1':P_protect_price})
+        fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
+        df5 = pd.DataFrame(data = {'Dates1':P_enhance_date,'BuyPrice1':P_enhance_price})
+        fig.add_trace(go.Scatter(x=df5['Dates1'],y=df5['BuyPrice1'], mode = 'markers',marker=dict(size=12, color="Green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="green")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="purple")))
