@@ -80,6 +80,13 @@ def Model_Display(total_value, reason, rows):
     df1['Market2'] = market_portfolio2
     df1['Market3'] = market_portfolio3
     df1['Market4'] = market_portfolio4
+    df1['26 EMA'] = df1.ewm(span = 26, min_periods = 26).mean()['Portfolio']
+    df1['12 EMA'] = df1.ewm(span = 12, min_periods = 12).mean()['Portfolio']
+    df1['MACD'] = df1['12 EMA'] - df1['26 EMA']
+    df1['MACD MEAN'] = df1['MACD'].mean()
+    df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
+    df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
+    df1['RSI MEAN'] = df1['RSI'].mean()
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
         fig = go.Figure()
@@ -93,29 +100,22 @@ def Model_Display(total_value, reason, rows):
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
     if reason == 'MACD':
-        df1['26 EMA'] = df1.ewm(span = 26, min_periods = 26).mean()['Portfolio']
-        df1['12 EMA'] = df1.ewm(span = 12, min_periods = 12).mean()['Portfolio']
-        df1['MACD'] = df1['12 EMA'] - df1['26 EMA']
-        df1['MEAN'] = df1['MACD'].mean()
-        df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
         fig = go.Figure()
         king = ('MACD Chart')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Signal Line'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['MEAN'], mode = 'lines',marker=dict(size=1, color="yellow"),showlegend=False))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD MEAN'], mode = 'lines',marker=dict(size=1, color="yellow"),showlegend=False))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="MACD Value", width=700, height = 500)
         return fig
     if reason == 'RSI':
-        df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
         df1['buy']= 20
         df1['sell'] = 80
-        df1['MEAN'] = df1['RSI'].mean()
         fig = go.Figure()
         king = ('RSI Chart')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['RSI'], mode = 'lines',marker=dict(size=1, color="blue"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['buy'], mode = 'lines',marker=dict(size=1, color="green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['sell'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['MEAN'], mode = 'lines',marker=dict(size=1, color="yellow"),showlegend=False))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['RSI MEAN'], mode = 'lines',marker=dict(size=1, color="yellow"),showlegend=False))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="RSI Value", width=700, height = 500)
         return fig
     df4 = pd.DataFrame()
