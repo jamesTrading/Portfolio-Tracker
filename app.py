@@ -124,6 +124,12 @@ def Model_Display(total_value, reason, rows):
                                 MACD_enhance_price.append(df1['MACD'][x])
                                 RSI_enhance_date.append(df1.index.date[x])
                                 MACD_enhance_date.append(df1.index.date[x])
+        if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
+            if df1['MACD'][x]<df1['Signal Line'][x]:
+                short_time = 0
+        if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
+            if df1['MACD'][x]>df1['MACD'][x]:
+                long_time = 0
                             
         x = x + 1
     df1 = df1.bfill(axis ='rows')
