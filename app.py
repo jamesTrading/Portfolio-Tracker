@@ -114,6 +114,7 @@ def Model_Display(total_value, reason, rows):
     SPXU_Units = 0
     TQQQ_Units = 0
     UPRO_Units = 0
+    Profit_Taken = 0
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
@@ -121,6 +122,9 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] < df1['MACD'][x-1]:
                         if df1['RSI'][x] > df1['RSI MEAN'][x]:
                             if short_time == 0:
+                                Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                                TQQQ_Units = 0
+                                UPRO_Units = 0
                                 Order_Value = 0.05*df1['Portfolio'][x]
                                 Order_Status = "SHORT"
                                 SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
@@ -139,6 +143,9 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] > df1['MACD'][x-1]:
                         if df1['RSI'][x] < df1['RSI MEAN'][x]:
                             if long_time == 0:
+                                Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
+                                SQQQ_Units = 0
+                                SPXU_Units = 0
                                 Order_Value = 0.05*df1['Portfolio'][x]
                                 Order_Status = "LONG"
                                 TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
@@ -153,6 +160,9 @@ def Model_Display(total_value, reason, rows):
                                 P_enhance_date.append(df1.index.date[x])
         if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
             if df1['MACD'][x]<df1['Signal Line'][x]:
+                Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
+                SQQQ_Units = 0
+                SPXU_Units = 0
                 Order_Value = 0
                 short_time = 0
                 SQQQ_Units = 0
@@ -160,6 +170,9 @@ def Model_Display(total_value, reason, rows):
                 Order_Status = "NEUTRAL"
         if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
             if df1['MACD'][x]>df1['MACD'][x]:
+                Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                TQQQ_Units = 0
+                UPRO_Units = 0
                 Order_Value = 0
                 long_time = 0
                 TQQQ_Units = 0
@@ -168,6 +181,9 @@ def Model_Display(total_value, reason, rows):
         if long_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < long_time:
+                    Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                    TQQQ_Units = 0
+                    UPRO_Units = 0
                     Order_Value = 0.05*df1['Portfolio'][x]
                     Order_Status = "SHORT"
                     SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
@@ -183,6 +199,9 @@ def Model_Display(total_value, reason, rows):
         if short_time > 0:
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
                 if x - 5 < short_time:
+                    Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
+                    SQQQ_Units = 0
+                    SPXU_Units = 0
                     Order_Value = 0.05*df1['Portfolio'][x]
                     Order_Status = "LONG"
                     TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
@@ -197,11 +216,11 @@ def Model_Display(total_value, reason, rows):
                     P_enhance_date.append(df1.index.date[x])
         if Order_Value > 0:
             if Order_Status == "SHORT":
-                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value)
+                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value + Profit_Taken)
             if Order_Status == "LONG":
-                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value)
+                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value + Profit_Taken)
         else:
-            Enhanced_Portfolio_Value.append(df1['Portfolio'][x])
+            Enhanced_Portfolio_Value.append(df1['Portfolio'][x] + Profit_Taken)
         x = x + 1
     df1['Enhanced Portfolio'] = Enhanced_Portfolio_Value
     df1 = df1.bfill(axis ='rows')
