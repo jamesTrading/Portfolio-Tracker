@@ -53,6 +53,10 @@ def Model_Display(total_value, reason, rows):
     market3 = yf.download("IOZ.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
     united3 = total_value/market3['Close'][0]
     market4 = yf.download("VTS.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    SPXU = yf.download("SPXU",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    SQQQ = yf.download("SQQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    TQQQ = yf.download("TQQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    UPRO = yf.download("UPRO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
     united4 = total_value/market4['Close'][0]
     market_portfolio1 = []
     market_portfolio2 = []
@@ -103,6 +107,13 @@ def Model_Display(total_value, reason, rows):
     x = 4
     short_time = 0
     long_time = 0
+    Enhanced_Portfolio_Value = []
+    Order_Value = 0
+    Order_Status = ""
+    SQQQ_Units = 0
+    SPXU_Units = 0
+    TQQQ_Units = 0
+    UPRO_Units = 0
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
@@ -110,6 +121,10 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] < df1['MACD'][x-1]:
                         if df1['RSI'][x] > df1['RSI MEAN'][x]:
                             if short_time == 0:
+                                Order_Value = 0.05*df1['Portfolio'][x]
+                                Order_Status = "SHORT"
+                                SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
+                                SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
                                 RSI_protect_price.append(df1['RSI'][x])
                                 MACD_protect_price.append(df1['MACD'][x])
                                 RSI_protect_date.append(df1.index.date[x])
@@ -124,6 +139,10 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] > df1['MACD'][x-1]:
                         if df1['RSI'][x] < df1['RSI MEAN'][x]:
                             if long_time == 0:
+                                Order_Value = 0.05*df1['Portfolio'][x]
+                                Order_Status = "LONG"
+                                TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
+                                UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
                                 short_time = 0
                                 long_time = x
                                 RSI_enhance_price.append(df1['RSI'][x])
@@ -134,13 +153,25 @@ def Model_Display(total_value, reason, rows):
                                 P_enhance_date.append(df1.index.date[x])
         if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
             if df1['MACD'][x]<df1['Signal Line'][x]:
+                Order_Value = 0
                 short_time = 0
+                SQQQ_Units = 0
+                SPXU_Units = 0
+                Order_Status = "NEUTRAL"
         if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
             if df1['MACD'][x]>df1['MACD'][x]:
+                Order_Value = 0
                 long_time = 0
+                TQQQ_Units = 0
+                UPRO_Units = 0
+                Order_Status = "NEUTRAL"
         if long_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < long_time:
+                    Order_Value = 0.05*df1['Portfolio'][x]
+                    Order_Status = "SHORT"
+                    SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
+                    SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
                     RSI_protect_price.append(df1['RSI'][x])
                     MACD_protect_price.append(df1['MACD'][x])
                     RSI_protect_date.append(df1.index.date[x])
@@ -152,6 +183,10 @@ def Model_Display(total_value, reason, rows):
         if short_time > 0:
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
                 if x - 5 < short_time:
+                    Order_Value = 0.05*df1['Portfolio'][x]
+                    Order_Status = "LONG"
+                    TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
+                    UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
                     short_time = 0
                     long_time = x
                     RSI_enhance_price.append(df1['RSI'][x])
@@ -160,12 +195,21 @@ def Model_Display(total_value, reason, rows):
                     MACD_enhance_date.append(df1.index.date[x])
                     P_enhance_price.append(df1['Portfolio'][x])
                     P_enhance_date.append(df1.index.date[x])
+        if Order_Value > 0:
+            if Order_Status == "SHORT":
+                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value)
+            if Order_Status == "LONG":
+                Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value)
+        else:
+            Enhanced_Portfolio_Value.append(df1['Portfolio'][x])
         x = x + 1
+    df1['Enhanced Portfolio'] = Enhanced_Portfolio_Value
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
         fig = go.Figure()
         king = ('Portfolio Performance of Lump Sum Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Enhanced Portfolio'], mode = 'lines', name = 'Enhanced Portfolio',marker=dict(size=1, color="blue")))
         df4 = pd.DataFrame(data = {'Dates1':P_protect_date,'SellPrice1':P_protect_price})
         fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
         df5 = pd.DataFrame(data = {'Dates1':P_enhance_date,'BuyPrice1':P_enhance_price})
