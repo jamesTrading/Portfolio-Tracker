@@ -140,7 +140,7 @@ def Model_Display(total_value, reason, rows):
                 long_time = 0
         if long_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
-                if x - 10 < long_time:
+                if x - 5 < long_time:
                     RSI_protect_price.append(df1['RSI'][x])
                     MACD_protect_price.append(df1['MACD'][x])
                     RSI_protect_date.append(df1.index.date[x])
@@ -151,7 +151,7 @@ def Model_Display(total_value, reason, rows):
                     long_time = 0
         if short_time > 0:
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
-                if x - 10 < short_time:
+                if x - 5 < short_time:
                     short_time = 0
                     long_time = x
                     RSI_enhance_price.append(df1['RSI'][x])
