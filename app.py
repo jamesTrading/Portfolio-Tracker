@@ -107,7 +107,7 @@ def Model_Display(total_value, reason, rows):
     x = 4
     short_time = 0
     long_time = 0
-    Enhanced_Portfolio_Value = []
+    Enhanced_Portfolio_Value = [df1['Portfolio'][0],df1['Portfolio'][1],df1['Portfolio'][2],df1['Portfolio'][3]]
     Order_Value = 0
     Order_Status = ""
     SQQQ_Units = 0
