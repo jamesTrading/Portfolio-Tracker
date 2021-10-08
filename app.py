@@ -148,7 +148,18 @@ def Model_Display(total_value, reason, rows):
                     P_protect_price.append(df1['Portfolio'][x])
                     P_protect_date.append(df1.index.date[x])
                     short_time = x
-                    long_time = 0        
+                    long_time = 0
+        if short_time > 0:
+            if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
+                if x - 10 < short_time:
+                    short_time = 0
+                    long_time = x
+                    RSI_enhance_price.append(df1['RSI'][x])
+                    MACD_enhance_price.append(df1['MACD'][x])
+                    RSI_enhance_date.append(df1.index.date[x])
+                    MACD_enhance_date.append(df1.index.date[x])
+                    P_enhance_price.append(df1['Portfolio'][x])
+                    P_enhance_date.append(df1.index.date[x])
         x = x + 1
     df1 = df1.bfill(axis ='rows')
     if reason == 'figure':
