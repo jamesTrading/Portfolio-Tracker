@@ -162,26 +162,28 @@ def Model_Display(total_value, reason, rows):
                                 P_enhance_date.append(df1.index.date[x])
         if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
             if df1['MACD'][x]<df1['Signal Line'][x]:
-                print("3",df1.index.date[x])
-                Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
-                SQQQ_Units = 0
-                SPXU_Units = 0
-                Order_Value = 0
-                short_time = 0
-                SQQQ_Units = 0
-                SPXU_Units = 0
-                Order_Status = "NEUTRAL"
+                if SQQQ_Units > 0:
+                    print("3",df1.index.date[x])
+                    Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
+                    SQQQ_Units = 0
+                    SPXU_Units = 0
+                    Order_Value = 0
+                    short_time = 0
+                    SQQQ_Units = 0
+                    SPXU_Units = 0
+                    Order_Status = "NEUTRAL"
         if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
             if df1['MACD'][x]>df1['MACD'][x]:
-                print("4",df1.index.date[x])
-                Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
-                TQQQ_Units = 0
-                UPRO_Units = 0
-                Order_Value = 0
-                long_time = 0
-                TQQQ_Units = 0
-                UPRO_Units = 0
-                Order_Status = "NEUTRAL"
+                if TQQQ_Units > 0:
+                    print("4",df1.index.date[x])
+                    Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                    TQQQ_Units = 0
+                    UPRO_Units = 0
+                    Order_Value = 0
+                    long_time = 0
+                    TQQQ_Units = 0
+                    UPRO_Units = 0
+                    Order_Status = "NEUTRAL"
         if long_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < long_time:
