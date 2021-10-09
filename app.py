@@ -117,10 +117,10 @@ def Model_Display(total_value, reason, rows):
     Profit_Taken = 0
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
-            if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
+            if df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2] and df1['MACD'][x-3] > df1['Signal Line'][x-3]:
                 if df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
                     if df1['MACD'][x] < df1['MACD'][x-1] and df1['MACD'][x-1] < df1['MACD'][x-2]:
-                        if df1['RSI'][x] > df1['RSI MEAN'][x]:
+                        if df1['RSI'][x-1] > df1['RSI MEAN'][x-1]:
                             if short_time == 0:
                                 print("1",df1.index.date[x])
                                 Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
