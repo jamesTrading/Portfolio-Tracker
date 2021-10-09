@@ -261,7 +261,7 @@ def Model_Display(total_value, reason, rows):
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="green")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="purple")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="orange")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Market4'], mode = 'lines', name = 'US Total Market Benchmark',marker=dict(size=1, color="yellow")))
         fig.update_layout(title=king,xaxis_title="Time",yaxis_title="Portfolio Value", width=1100, height = 700)
         fig.update_layout(legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01))
         return fig
@@ -296,24 +296,28 @@ def Model_Display(total_value, reason, rows):
         return fig
     df4 = pd.DataFrame()
     portfolio = []
+    E_portfolio = []
     m1 = []
     m2 = []
     m3 = []
     m4 = []
     x = 1
     p_ret = [0]
+    PE_ret = [0]
     m1_ret = [0]
     m2_ret = [0]
     m3_ret = [0]
     m4_ret = [0]
     while x < len(df1['Portfolio']):
         p_ret.append((df1['Portfolio'][x]-df1['Portfolio'][x-1])/df1['Portfolio'][x-1])
+        PE_ret.append((df1['Enhanced Portfolio'][x]-df1['Enhanced Portfolio'][x-1])/df1['Enhanced Portfolio'][x-1])
         m1_ret.append((df1['Market1'][x]-df1['Market1'][x-1])/df1['Market1'][x-1])
         m2_ret.append((df1['Market2'][x]-df1['Market2'][x-1])/df1['Market2'][x-1])
         m3_ret.append((df1['Market3'][x]-df1['Market3'][x-1])/df1['Market3'][x-1])
         m4_ret.append((df1['Market4'][x]-df1['Market4'][x-1])/df1['Market4'][x-1])
         x = x + 1
     df1['P Ret'] = p_ret
+    df1['PE Ret'] = PE_ret
     df1['M1 Ret'] = m1_ret
     df1['M2 Ret'] = m2_ret
     df1['M3 Ret'] = m3_ret
@@ -321,22 +325,27 @@ def Model_Display(total_value, reason, rows):
     if reason == 'market':
         measures = ['Best Month','Worst Month','Downside Deviation','Worst 1 Day', 'Maximum Drawdown']
         df1['P Month'] = df1.rolling(window=21).sum()['P Ret']
+        df1['PE Month'] = df1.rolling(window=21).sum()['PE Ret']
         df1['M1 Month'] = df1.rolling(window=21).sum()['M1 Ret']
         df1['M2 Month'] = df1.rolling(window=21).sum()['M2 Ret']
         df1['M3 Month'] = df1.rolling(window=21).sum()['M3 Ret']
         df1['M4 Month'] = df1.rolling(window=21).sum()['M4 Ret']
         portfolio.append(round(max(df1['P Month'][22:len(df1['P Month'])-1]),3))
+        E_portfolio.append(round(max(df1['PE Month'][22:len(df1['PE Month'])-1]),3))
         m1.append(round(max(df1['M1 Month'][22:len(df1['P Month'])-1]),3))
         m2.append(round(max(df1['M2 Month'][22:len(df1['P Month'])-1]),3))
         m3.append(round(max(df1['M3 Month'][22:len(df1['P Month'])-1]),3))
         m4.append(round(max(df1['M4 Month'][22:len(df1['P Month'])-1]),3))
         portfolio.append(round(min(df1['P Month'][22:len(df1['P Month'])-1]),3))
+        E_portfolio.append(round(min(df1['PE Month'][22:len(df1['PE Month'])-1]),3))
         m1.append(round(min(df1['M1 Month'][22:len(df1['P Month'])-1]),3))
         m2.append(round(min(df1['M2 Month'][22:len(df1['P Month'])-1]),3))
         m3.append(round(min(df1['M3 Month'][22:len(df1['P Month'])-1]),3))
         m4.append(round(min(df1['M4 Month'][22:len(df1['P Month'])-1]),3))
         dfp = df1.loc[df1['P Ret']<0]
         portfolio.append(round(dfp['P Ret'].std(),3))
+        dfpE = df1.loc[df1['PE Ret']<0]
+        E_portfolio.append(round(dfpE['PE Ret'].std(),3))
         dfm1 = df1.loc[df1['M1 Ret']<0]
         m1.append(round(dfp['M1 Ret'].std(),3))
         dfm2 = df1.loc[df1['M2 Ret']<0]
@@ -346,35 +355,41 @@ def Model_Display(total_value, reason, rows):
         dfm4 = df1.loc[df1['M4 Ret']<0]
         m4.append(round(dfp['M4 Ret'].std(),3))
         portfolio.append(round(min(df1['P Ret']),3))
+        E_portfolio.append(round(min(df1['PE Ret']),3))
         m1.append(round(min(df1['M1 Ret']),3))
         m2.append(round(min(df1['M2 Ret']),3))
         m3.append(round(min(df1['M3 Ret']),3))
         m4.append(round(min(df1['M4 Ret']),3))
         x = 1
         DD_P = [0]
+        DD_PE = [0]
         DD_M1 = [0]
         DD_M2 = [0]
         DD_M3 = [0]
         DD_M4 = [0]
         while x < len(df1['P Ret']):
             MaxP = max(df1['Portfolio'][0:x])
+            MaxPE = max(df1['Enhanced Portfolio'][0:x])
             MaxM1 = max(df1['Market1'][0:x])
             MaxM2 = max(df1['Market2'][0:x])
             MaxM3 = max(df1['Market3'][0:x])
             MaxM4 = max(df1['Market4'][0:x])
             DD_P.append((df1['Portfolio'][x]-MaxP)/MaxP)
+            DD_PE.append((df1['Enhanced Portfolio'][x]-MaxPE)/MaxPE)
             DD_M1.append((df1['Market1'][x]-MaxM1)/MaxM1)
             DD_M2.append((df1['Market2'][x]-MaxM2)/MaxM2)
             DD_M3.append((df1['Market3'][x]-MaxM3)/MaxM3)
             DD_M4.append((df1['Market4'][x]-MaxM4)/MaxM4)
             x = x + 1
         portfolio.append(round(min(DD_P),3))
+        E_portfolio.append(round(min(DD_PE),3))
         m1.append(round(min(DD_M1),3))
         m2.append(round(min(DD_M2),3))
         m3.append(round(min(DD_M3),3))
         m4.append(round(min(DD_M4),3))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
+        df4['Enhanced Portfolio'] = E_portfolio
         df4['S&P 500'] = m1
         df4['Nasdaq'] = m2
         df4['ASX 200'] = m3
@@ -384,12 +399,15 @@ def Model_Display(total_value, reason, rows):
         measures = ['Annual Return','Annual Volatility','Sharpe Ratio', 'Sortino Ratio']
         df4['Measures'] = measures
         portfolio.append(round(df1['P Ret'].mean()*252,3))
+        E_portfolio.append(round(df1['PE Ret'].mean()*252,3))
         m1.append(round(df1['M1 Ret'].mean()*252,3))
         m2.append(round(df1['M2 Ret'].mean()*252,3))
         m3.append(round(df1['M3 Ret'].mean()*252,3))
         m4.append(round(df1['M4 Ret'].mean()*252,3))
         df1['P Volatility'] = df1['P Ret'].rolling(window=252).std()
         df1['P Annual_Volatility'] = (df1['P Volatility'])*(252**(1/2))
+        df1['PE Volatility'] = df1['PE Ret'].rolling(window=252).std()
+        df1['PE Annual_Volatility'] = (df1['PE Volatility'])*(252**(1/2))
         df1['M1 Volatility'] = df1['M1 Ret'].rolling(window=252).std()
         df1['M1 Annual_Volatility'] = (df1['M1 Volatility'])*(252**(1/2))
         df1['M2 Volatility'] = df1['M2 Ret'].rolling(window=252).std()
@@ -399,17 +417,21 @@ def Model_Display(total_value, reason, rows):
         df1['M4 Volatility'] = df1['M4 Ret'].rolling(window=252).std()
         df1['M4 Annual_Volatility'] = (df1['M4 Volatility'])*(252**(1/2))
         portfolio.append(round(df1['P Annual_Volatility'][len(df1['P Annual_Volatility'])-1],3))
+        E_portfolio.append(round(df1['PE Annual_Volatility'][len(df1['PE Annual_Volatility'])-1],3))
         m1.append(round(df1['M1 Annual_Volatility'][len(df1['M1 Annual_Volatility'])-1],3))
         m2.append(round(df1['M2 Annual_Volatility'][len(df1['M2 Annual_Volatility'])-1],3))
         m3.append(round(df1['M3 Annual_Volatility'][len(df1['M3 Annual_Volatility'])-1],3))
         m4.append(round(df1['M4 Annual_Volatility'][len(df1['M4 Annual_Volatility'])-1],3))
         portfolio.append(round(((df1['P Ret'].mean()*252-0.02)/(df1['P Ret'].std()*(252**(1/2)))),3))
+        E_portfolio.append(round(((df1['PE Ret'].mean()*252-0.02)/(df1['PE Ret'].std()*(252**(1/2)))),3))
         m1.append(round(((df1['M1 Ret'].mean()*252-0.02)/(df1['M1 Ret'].std()*(252**(1/2)))),3))
         m2.append(round(((df1['M2 Ret'].mean()*252-0.02)/(df1['M2 Ret'].std()*(252**(1/2)))),3))
         m3.append(round(((df1['M3 Ret'].mean()*252-0.02)/(df1['M3 Ret'].std()*(252**(1/2)))),3))
         m4.append(round(((df1['M4 Ret'].mean()*252-0.02)/(df1['M4 Ret'].std()*(252**(1/2)))),3))
         dfp = df1.loc[df1['P Ret']<0]
         portfolio.append(round((df1['P Ret'].mean()*252-0.02)/(dfp['P Ret'].std()*(252**(1/2))),3))
+        dfpE = df1.loc[df1['PE Ret']<0]
+        E_portfolio.append(round((df1['PE Ret'].mean()*252-0.02)/(dfpE['PE Ret'].std()*(252**(1/2))),3))
         dfm1 = df1.loc[df1['M1 Ret']<0]
         m1.append(round((df1['M1 Ret'].mean()*252-0.02)/(dfm1['M1 Ret'].std()*(252**(1/2))),3))
         dfm2 = df1.loc[df1['M2 Ret']<0]
@@ -420,6 +442,7 @@ def Model_Display(total_value, reason, rows):
         m4.append(round((df1['M4 Ret'].mean()*252-0.02)/(dfm4['M4 Ret'].std()*(252**(1/2))),3))
         df4['Measures'] = measures
         df4['Portfolio'] = portfolio
+        df4['Enhanced Portfolio'] = E_portfolio
         df4['S&P 500'] = m1
         df4['Nasdaq'] = m2
         df4['ASX 200'] = m3
