@@ -127,7 +127,6 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] < df1['MACD'][x-1] and df1['MACD'][x-1] < df1['MACD'][x-2]:
                         if df1['RSI'][x-1] > df1['RSI MEAN'][x-1]:
                             if short_time == 0:
-                                print("1",df1.index.date[x])
                                 Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                                 TQQQ_Units = 0
                                 UPRO_Units = 0
@@ -151,7 +150,6 @@ def Model_Display(total_value, reason, rows):
                     if df1['MACD'][x] > df1['MACD'][x-1]:
                         if df1['RSI'][x] < df1['RSI MEAN'][x]:
                             if long_time == 0:
-                                print("2",df1.index.date[x])
                                 Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                                 SQQQ_Units = 0
                                 SPXU_Units = 0
@@ -172,7 +170,6 @@ def Model_Display(total_value, reason, rows):
         if df1['MACD'][x-1]<df1['MACD'][x-2]:
             if df1['MACD'][x]>df1['MACD'][x-1]:
                 if SQQQ_Units > 0:
-                    print("3",df1.index.date[x])
                     Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                     SQQQ_Units = 0
                     SPXU_Units = 0
@@ -187,7 +184,6 @@ def Model_Display(total_value, reason, rows):
         if df1['MACD'][x-1]>df1['MACD'][x-2]:
             if df1['MACD'][x]<df1['MACD'][x-1]:
                 if TQQQ_Units > 0:
-                    print("4",df1.index.date[x])
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                     TQQQ_Units = 0
                     UPRO_Units = 0
@@ -202,7 +198,6 @@ def Model_Display(total_value, reason, rows):
         if neutral_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < buy_counter[len(buy_counter)-1]:
-                    print("5",df1.index.date[x])
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                     TQQQ_Units = 0
                     UPRO_Units = 0
@@ -222,7 +217,6 @@ def Model_Display(total_value, reason, rows):
                     neutral_time = 0
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
                 if x - 5 < sell_counter[len(sell_counter)-1]:
-                    print("6",df1.index.date[x])
                     Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                     SQQQ_Units = 0
                     SPXU_Units = 0
@@ -247,7 +241,6 @@ def Model_Display(total_value, reason, rows):
                 Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value + Profit_Taken)
         else:
             Enhanced_Portfolio_Value.append(df1['Portfolio'][x] + Profit_Taken)
-        print(Profit_Taken)
         x = x + 1
     df1['Enhanced Portfolio'] = Enhanced_Portfolio_Value
     df1 = df1.bfill(axis ='rows')
