@@ -160,8 +160,8 @@ def Model_Display(total_value, reason, rows):
                                 MACD_enhance_date.append(df1.index.date[x])
                                 P_enhance_price.append(df1['Portfolio'][x])
                                 P_enhance_date.append(df1.index.date[x])
-        if df1['MACD'][x-1]>df1['Signal Line'][x-1]:
-            if df1['MACD'][x]<df1['Signal Line'][x]:
+        if df1['MACD'][x-1]<df1['MACD'][x-2]:
+            if df1['MACD'][x]>df1['MACD'][x-1]:
                 if SQQQ_Units > 0:
                     print("3",df1.index.date[x])
                     Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
@@ -172,8 +172,8 @@ def Model_Display(total_value, reason, rows):
                     SQQQ_Units = 0
                     SPXU_Units = 0
                     Order_Status = "NEUTRAL"
-        if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
-            if df1['MACD'][x]>df1['MACD'][x]:
+        if df1['MACD'][x-1]>df1['MACD'][x-2]:
+            if df1['MACD'][x]<df1['MACD'][x-1]:
                 if TQQQ_Units > 0:
                     print("4",df1.index.date[x])
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
