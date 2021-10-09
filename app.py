@@ -115,6 +115,7 @@ def Model_Display(total_value, reason, rows):
     TQQQ_Units = 0
     UPRO_Units = 0
     Profit_Taken = 0
+    neutral_time = 0
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2] and df1['MACD'][x-3] > df1['Signal Line'][x-3]:
@@ -138,6 +139,7 @@ def Model_Display(total_value, reason, rows):
                                 P_protect_date.append(df1.index.date[x])
                                 short_time = x
                                 long_time = 0
+                                neutral_time = 0
         else:
             if df1['MACD'][x] < df1['Signal Line'][x] and df1['MACD'][x-1] < df1['Signal Line'][x-1] and df1['MACD'][x-2] < df1['Signal Line'][x-2]:
                 if df1['MACD'][x-1]<df1['MACD'][x-2] and df1['MACD'][x-2]<df1['MACD'][x-3] and df1['MACD'][x-3]<df1['MACD'][x-4]:
@@ -160,6 +162,7 @@ def Model_Display(total_value, reason, rows):
                                 MACD_enhance_date.append(df1.index.date[x])
                                 P_enhance_price.append(df1['Portfolio'][x])
                                 P_enhance_date.append(df1.index.date[x])
+                                neutral_time = 0
         if df1['MACD'][x-1]<df1['MACD'][x-2]:
             if df1['MACD'][x]>df1['MACD'][x-1]:
                 if SQQQ_Units > 0:
@@ -172,6 +175,7 @@ def Model_Display(total_value, reason, rows):
                     SQQQ_Units = 0
                     SPXU_Units = 0
                     Order_Status = "NEUTRAL"
+                    neutral_time = x
         if df1['MACD'][x-1]>df1['MACD'][x-2]:
             if df1['MACD'][x]<df1['MACD'][x-1]:
                 if TQQQ_Units > 0:
@@ -184,9 +188,10 @@ def Model_Display(total_value, reason, rows):
                     TQQQ_Units = 0
                     UPRO_Units = 0
                     Order_Status = "NEUTRAL"
-        if long_time > 0:
+                    neutral_time = x
+        if neutral_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
-                if x - 5 < long_time:
+                if x - 5 < neutral_time:
                     print("5",df1.index.date[x])
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                     TQQQ_Units = 0
@@ -203,9 +208,8 @@ def Model_Display(total_value, reason, rows):
                     P_protect_date.append(df1.index.date[x])
                     short_time = x
                     long_time = 0
-        if short_time > 0:
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
-                if x - 5 < short_time:
+                if x - 5 < neutral_time:
                     print("6",df1.index.date[x])
                     Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                     SQQQ_Units = 0
