@@ -118,6 +118,7 @@ def Model_Display(total_value, reason, rows):
     neutral_time = 0
     N_price = []
     N_date = []
+    N_Portfolio = []
     sell_counter = []
     buy_counter = []
     while x < len(df1[df['Holdings'][0]]):
@@ -179,6 +180,7 @@ def Model_Display(total_value, reason, rows):
                     SPXU_Units = 0
                     N_price.append(df1['MACD'][x])
                     N_date.append(df1.index.date[x])
+                    N_Portfolio.append(df1['Portfolio'][x])
                     Order_Status = "NEUTRAL"
                     neutral_time = x
         if df1['MACD'][x-1]>df1['MACD'][x-2]:
@@ -193,6 +195,7 @@ def Model_Display(total_value, reason, rows):
                     UPRO_Units = 0
                     N_price.append(df1['MACD'][x])
                     N_date.append(df1.index.date[x])
+                    N_Portfolio.append(df1['Portfolio'][x])
                     Order_Status = "NEUTRAL"
                     neutral_time = x
         if neutral_time > 0:
@@ -253,6 +256,8 @@ def Model_Display(total_value, reason, rows):
         fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
         df5 = pd.DataFrame(data = {'Dates1':P_enhance_date,'BuyPrice1':P_enhance_price})
         fig.add_trace(go.Scatter(x=df5['Dates1'],y=df5['BuyPrice1'], mode = 'markers',marker=dict(size=12, color="Green"),showlegend=False))
+        df6 = pd.DataFrame(data = {'Dates1':N_date,'NPrice1':N_Portfolio})
+        fig.add_trace(go.Scatter(x=df6['Dates1'],y=df6['NPrice1'], mode = 'markers',marker=dict(size=12, color="Red"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market1'], mode = 'lines', name = 'S&P 500 Benchmark',marker=dict(size=1, color="red")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market2'], mode = 'lines', name = 'Nasdaq Benchmark',marker=dict(size=1, color="green")))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Market3'], mode = 'lines', name = 'ASX 200 Benchmark',marker=dict(size=1, color="purple")))
