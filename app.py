@@ -170,14 +170,15 @@ def Model_Display(total_value, reason, rows):
                 Order_Status = "NEUTRAL"
         if df1['MACD'][x-1]<df1['Signal Line'][x-1]:
             if df1['MACD'][x]>df1['MACD'][x]:
-                Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
-                TQQQ_Units = 0
-                UPRO_Units = 0
-                Order_Value = 0
-                long_time = 0
-                TQQQ_Units = 0
-                UPRO_Units = 0
-                Order_Status = "NEUTRAL"
+                if df1['MACD'][x]>df1['MACD MEAN'][x]:
+                    Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                    TQQQ_Units = 0
+                    UPRO_Units = 0
+                    Order_Value = 0
+                    long_time = 0
+                    TQQQ_Units = 0
+                    UPRO_Units = 0
+                    Order_Status = "NEUTRAL"
         if long_time > 0:
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < long_time:
