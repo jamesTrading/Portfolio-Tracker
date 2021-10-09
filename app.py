@@ -221,6 +221,7 @@ def Model_Display(total_value, reason, rows):
                 Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value + Profit_Taken)
         else:
             Enhanced_Portfolio_Value.append(df1['Portfolio'][x] + Profit_Taken)
+        print(Profit_Taken)
         x = x + 1
     df1['Enhanced Portfolio'] = Enhanced_Portfolio_Value
     df1 = df1.bfill(axis ='rows')
