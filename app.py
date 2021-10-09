@@ -251,7 +251,7 @@ def Model_Display(total_value, reason, rows):
         fig = go.Figure()
         king = ('Portfolio Performance of Lump Sum Invested 2 Years Ago')
         fig.add_trace(go.Scatter(x=df1.index,y=df1['Portfolio'], mode = 'lines', name = 'Portfolio',marker=dict(size=1, color="blue")))
-        fig.add_trace(go.Scatter(x=df1.index,y=df1['Enhanced Portfolio'], mode = 'lines', name = 'Enhanced Portfolio',marker=dict(size=1, color="blue")))
+        fig.add_trace(go.Scatter(x=df1.index,y=df1['Enhanced Portfolio'], mode = 'lines', name = 'Enhanced Portfolio',marker=dict(size=1, color="Orange")))
         df4 = pd.DataFrame(data = {'Dates1':P_protect_date,'SellPrice1':P_protect_price})
         fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
         df5 = pd.DataFrame(data = {'Dates1':P_enhance_date,'BuyPrice1':P_enhance_price})
