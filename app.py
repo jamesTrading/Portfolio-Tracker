@@ -482,15 +482,15 @@ app.layout = html.Div([
     html.Div([
         html.H4('Holdings and Weights Visualised'),
         dcc.Graph(id='datatable-upload-graph')
-        ],style={'width': '25%', 'float': 'left','display': 'inline-block','padding-bottom':'2%'}),
+        ],style={'width': '30%', 'float': 'left','display': 'inline-block','padding-right':'1%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Market Measures'),
         html.Table(id = 'my-market'),
-        ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+        ],style={'width': '30%', 'float': 'middle','display': 'inline-block','padding-right':'1%','padding-bottom':'2%'}),
     html.Div([
         html.H4('Risk and Financial Measures'),
         html.Table(id = 'my-risk'),
-        ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
+        ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-right':'1%','padding-bottom':'2%'}),
     html.Div([
         dcc.Graph(id='my-MACD')
         ],style={'width': '45%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
@@ -541,7 +541,7 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
-    fig.update_layout(width=380, height = 380)
+    fig.update_layout(width=350, height = 380)
     return fig
 
 @app.callback(Output('my-MACD', 'figure'),
