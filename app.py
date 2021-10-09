@@ -116,6 +116,8 @@ def Model_Display(total_value, reason, rows):
     UPRO_Units = 0
     Profit_Taken = 0
     neutral_time = 0
+    N_price = []
+    N_date = []
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2] and df1['MACD'][x-3] > df1['Signal Line'][x-3]:
@@ -174,6 +176,8 @@ def Model_Display(total_value, reason, rows):
                     short_time = 0
                     SQQQ_Units = 0
                     SPXU_Units = 0
+                    N_price.append(df1['MACD'][x])
+                    N_date.append(df1.index.date[x])
                     Order_Status = "NEUTRAL"
                     neutral_time = x
         if df1['MACD'][x-1]>df1['MACD'][x-2]:
@@ -187,6 +191,8 @@ def Model_Display(total_value, reason, rows):
                     long_time = 0
                     TQQQ_Units = 0
                     UPRO_Units = 0
+                    N_price.append(df1['MACD'][x])
+                    N_date.append(df1.index.date[x])
                     Order_Status = "NEUTRAL"
                     neutral_time = x
         if neutral_time > 0:
@@ -260,6 +266,8 @@ def Model_Display(total_value, reason, rows):
         king = ('MACD Chart')
         df4 = pd.DataFrame(data = {'Dates1':MACD_protect_date,'SellPrice1':MACD_protect_price})
         fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Orange"),showlegend=False))
+        df4 = pd.DataFrame(data = {'Dates1':N_date,'SellPrice1':N_price})
+        fig.add_trace(go.Scatter(x=df4['Dates1'],y=df4['SellPrice1'], mode = 'markers',marker=dict(size=12, color="Red"),showlegend=False))
         df5 = pd.DataFrame(data = {'Dates1':MACD_enhance_date,'BuyPrice1':MACD_enhance_price})
         fig.add_trace(go.Scatter(x=df5['Dates1'],y=df5['BuyPrice1'], mode = 'markers',marker=dict(size=12, color="Green"),showlegend=False))
         fig.add_trace(go.Scatter(x=df1.index,y=df1['MACD'], mode = 'lines',marker=dict(size=1, color="red"),showlegend=False))
