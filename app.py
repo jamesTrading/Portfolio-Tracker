@@ -208,6 +208,7 @@ def Model_Display(total_value, reason, rows):
                     P_protect_date.append(df1.index.date[x])
                     short_time = x
                     long_time = 0
+                    neutral_time = 0
             if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
                 if x - 5 < neutral_time:
                     print("6",df1.index.date[x])
@@ -220,6 +221,7 @@ def Model_Display(total_value, reason, rows):
                     UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
                     short_time = 0
                     long_time = x
+                    neutral_time = 0
                     RSI_enhance_price.append(df1['RSI'][x])
                     MACD_enhance_price.append(df1['MACD'][x])
                     RSI_enhance_date.append(df1.index.date[x])
