@@ -118,8 +118,8 @@ def Model_Display(total_value, reason, rows):
     while x < len(df1[df['Holdings'][0]]):
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x] > df1['Signal Line'][x] and df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2]:
-                if df1['MACD'][x-1]>df1['MACD'][x-2] and df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
-                    if df1['MACD'][x] < df1['MACD'][x-1]:
+                if df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
+                    if df1['MACD'][x] < df1['MACD'][x-1] and df1['MACD'][x-1] < df1['MACD'][x-2]:
                         if df1['RSI'][x] > df1['RSI MEAN'][x]:
                             if short_time == 0:
                                 print("1",df1.index.date[x])
