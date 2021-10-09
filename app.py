@@ -125,7 +125,7 @@ def Model_Display(total_value, reason, rows):
                                 Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                                 TQQQ_Units = 0
                                 UPRO_Units = 0
-                                Order_Value = 0.05*df1['Portfolio'][x]
+                                Order_Value = 0.2*df1['Portfolio'][x]
                                 Order_Status = "SHORT"
                                 SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
                                 SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
@@ -146,7 +146,7 @@ def Model_Display(total_value, reason, rows):
                                 Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                                 SQQQ_Units = 0
                                 SPXU_Units = 0
-                                Order_Value = 0.05*df1['Portfolio'][x]
+                                Order_Value = 0.2*df1['Portfolio'][x]
                                 Order_Status = "LONG"
                                 TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
                                 UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
@@ -185,7 +185,7 @@ def Model_Display(total_value, reason, rows):
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
                     TQQQ_Units = 0
                     UPRO_Units = 0
-                    Order_Value = 0.05*df1['Portfolio'][x]
+                    Order_Value = 0.2*df1['Portfolio'][x]
                     Order_Status = "SHORT"
                     SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
                     SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
@@ -203,7 +203,7 @@ def Model_Display(total_value, reason, rows):
                     Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
                     SQQQ_Units = 0
                     SPXU_Units = 0
-                    Order_Value = 0.05*df1['Portfolio'][x]
+                    Order_Value = 0.2*df1['Portfolio'][x]
                     Order_Status = "LONG"
                     TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
                     UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
