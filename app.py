@@ -542,6 +542,7 @@ def display_graph(rows):
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
     fig.update_layout(width=350, height = 320)
+    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
     return fig
 
 @app.callback(Output('my-MACD', 'figure'),
