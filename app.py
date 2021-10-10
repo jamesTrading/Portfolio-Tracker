@@ -512,7 +512,7 @@ def update_graph(totalvalue, rows):
 def update_market(totalvalue, rows):
     table = Model_Display(totalvalue, 'market', rows)
     # Header
-    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'20px'})
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'15px'})
 
 
 #This app callback updates the graph as per the relevant company
@@ -520,7 +520,7 @@ def update_market(totalvalue, rows):
 def update_risk(totalvalue, rows):
     table = Model_Display(totalvalue, 'risk', rows)
     # Header
-    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'20px'})
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'15px'})
 
 
 @app.callback(Output('datatable-upload-container', 'data'),
