@@ -490,7 +490,7 @@ app.layout = html.Div([
     html.Div([
         html.H4('Risk and Financial Measures'),
         html.Table(id = 'my-risk'),
-        ],style={'width': '30%', 'float': 'right','display': 'inline-block','padding-bottom':'2%'}),
+        ],style={'width': '35%', 'float': 'right','display': 'inline-block','padding-right':'1%','padding-bottom':'2%'}),
     html.Div([
         dcc.Graph(id='my-MACD')
         ],style={'width': '45%', 'float': 'left','display': 'inline-block','padding-right':'2%','padding-bottom':'2%'}),
@@ -512,7 +512,7 @@ def update_graph(totalvalue, rows):
 def update_market(totalvalue, rows):
     table = Model_Display(totalvalue, 'market', rows)
     # Header
-    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'15px'})
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'17px'})
 
 
 #This app callback updates the graph as per the relevant company
@@ -520,7 +520,7 @@ def update_market(totalvalue, rows):
 def update_risk(totalvalue, rows):
     table = Model_Display(totalvalue, 'risk', rows)
     # Header
-    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'15px'})
+    return html.Table([html.Tr([html.Th(col) for col in table.columns])] + [html.Tr([html.Td(table.iloc[i][col]) for col in table.columns]) for i in range(0,len(table.Portfolio))], style={'border':'solid','border-spacing':'17px'})
 
 
 @app.callback(Output('datatable-upload-container', 'data'),
@@ -541,7 +541,7 @@ def display_graph(rows):
     fig = go.Figure(data=[go.Pie(labels=df[df.columns[0]], values=df[df.columns[1]],insidetextorientation='radial')])
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update(layout_showlegend=False)
-    fig.update_layout(width=350, height = 350)
+    fig.update_layout(width=350, height = 320)
     return fig
 
 @app.callback(Output('my-MACD', 'figure'),
