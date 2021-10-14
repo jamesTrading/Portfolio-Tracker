@@ -52,6 +52,7 @@ def Model_Display(total_value, reason, rows):
     market2 = yf.download("QQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
     united2 = total_value/market2['Close'][0]
     market3 = yf.download("IOZ.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    print(market3)
     united3 = total_value/market3['Close'][0]
     market4 = yf.download("VTS.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
     SPXU = yf.download("SPXU",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
@@ -67,6 +68,7 @@ def Model_Display(total_value, reason, rows):
     count1 = 0
     count2 = 0
     portfolio_value = []
+    print(len(df1[df['Holdings'][0]]))
     quick_sum = 0
     while count1 < len(df1[df['Holdings'][0]]):
         market_portfolio1.append(united1*market1['Close'][count1])
