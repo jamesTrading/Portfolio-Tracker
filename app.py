@@ -47,6 +47,7 @@ def Model_Display(total_value, reason, rows):
         amount_of_shares.append(df['Dollar Allocation'][count]/df1[h][0])
         count = count + 1
     market1 = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    print(market1)
     united1 = total_value/market1['Close'][0]
     market2 = yf.download("QQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
     united2 = total_value/market2['Close'][0]
