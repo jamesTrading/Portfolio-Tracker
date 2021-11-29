@@ -80,13 +80,13 @@ def Model_Display(total_value, reason, rows):
             count2 = count2 + 1
         portfolio_value.append(round(quick_sum,2))
         count1 = count1 + 1
-    print(len(df1['Portfolio']))
-    print(len(df1['Market1']))
     df1['Portfolio'] = portfolio_value      
     df1['Market1'] = market_portfolio1
     df1['Market2'] = market_portfolio2
     df1['Market3'] = market_portfolio3
     df1['Market4'] = market_portfolio4
+    print(len(df1['Portfolio']))
+    print(len(df1['Market1']))
     df1['26 EMA'] = df1.ewm(span = 26, min_periods = 26).mean()['Portfolio']
     df1['12 EMA'] = df1.ewm(span = 12, min_periods = 12).mean()['Portfolio']
     df1['MACD'] = df1['12 EMA'] - df1['26 EMA']
