@@ -203,6 +203,8 @@ def Model_Display(total_value, reason, rows):
                     Order_Status = "NEUTRAL"
                     neutral_time = x
         if neutral_time > 0:
+            print(MACD_enhance_price)
+            print(MACD_protect_price)
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < buy_counter[len(buy_counter)-1]:
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
