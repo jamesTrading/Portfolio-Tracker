@@ -94,6 +94,7 @@ def Model_Display(total_value, reason, rows):
     df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
     df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
     df1['RSI MEAN'] = df1['RSI'].mean()
+    print(df1['MACD'])
     portfolio_advanced = []
     RSI_protect_price = []
     MACD_protect_price = []
@@ -206,6 +207,7 @@ def Model_Display(total_value, reason, rows):
             print(MACD_enhance_price)
             print(MACD_protect_price)
             print(neutral_time)
+            
             if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
                 if x - 5 < buy_counter[len(buy_counter)-1]:
                     Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
