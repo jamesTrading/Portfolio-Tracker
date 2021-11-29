@@ -68,6 +68,7 @@ def Model_Display(total_value, reason, rows):
     portfolio_value = []
     quick_sum = 0
     print(df['Units'])
+    df1 = df1.bfill(axis ='rows')
     print(df1)
     print("fart")
     print(df['Holdings'])
