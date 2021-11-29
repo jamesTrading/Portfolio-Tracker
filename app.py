@@ -67,6 +67,10 @@ def Model_Display(total_value, reason, rows):
     count2 = 0
     portfolio_value = []
     quick_sum = 0
+    print(df['Units'])
+    print(df1)
+    print("fart")
+    print(df['Holdings'])
     while count1 < len(market1):
         market_portfolio1.append(united1*market1['Close'][count1])
         market_portfolio2.append(united2*market2['Close'][count1])
