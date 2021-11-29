@@ -85,8 +85,6 @@ def Model_Display(total_value, reason, rows):
     df1['Market2'] = market_portfolio2
     df1['Market3'] = market_portfolio3
     df1['Market4'] = market_portfolio4
-    print(len(df1['Portfolio']))
-    print(len(df1['Market1']))
     df1['26 EMA'] = df1.ewm(span = 26, min_periods = 26).mean()['Portfolio']
     df1['12 EMA'] = df1.ewm(span = 12, min_periods = 12).mean()['Portfolio']
     df1['MACD'] = df1['12 EMA'] - df1['26 EMA']
@@ -94,7 +92,6 @@ def Model_Display(total_value, reason, rows):
     df1['Signal Line'] = df1.ewm(span = 9, min_periods = 9).mean()['MACD']
     df1['RSI'] = pta.rsi(df1['Portfolio'], length = 14)
     df1['RSI MEAN'] = df1['RSI'].mean()
-    print(df1['MACD'])
     portfolio_advanced = []
     RSI_protect_price = []
     MACD_protect_price = []
@@ -126,7 +123,6 @@ def Model_Display(total_value, reason, rows):
     sell_counter = []
     buy_counter = []
     while x < len(df1[df['Holdings'][0]]):
-        print(x)
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2] and df1['MACD'][x-3] > df1['Signal Line'][x-3]:
                 if df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
@@ -203,49 +199,47 @@ def Model_Display(total_value, reason, rows):
                     N_Portfolio.append(df1['Portfolio'][x])
                     Order_Status = "NEUTRAL"
                     neutral_time = x
-        print(Order_Status)
         if neutral_time > 0:
-            print(MACD_enhance_price)
-            print(MACD_protect_price)
-            print(neutral_time)
-            if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
-                if x - 5 < buy_counter[len(buy_counter)-1]:
-                    Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
-                    TQQQ_Units = 0
-                    UPRO_Units = 0
-                    Order_Value = 0.1*df1['Portfolio'][x]
-                    Order_Status = "SHORT"
-                    SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
-                    SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
-                    RSI_protect_price.append(df1['RSI'][x])
-                    MACD_protect_price.append(df1['MACD'][x])
-                    RSI_protect_date.append(df1.index.date[x])
-                    MACD_protect_date.append(df1.index.date[x])
-                    P_protect_price.append(df1['Portfolio'][x])
-                    P_protect_date.append(df1.index.date[x])
-                    sell_counter.append(x)
-                    short_time = x
-                    long_time = 0
-                    neutral_time = 0
-            if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
-                if x - 5 < sell_counter[len(sell_counter)-1]:
-                    Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
-                    SQQQ_Units = 0
-                    SPXU_Units = 0
-                    Order_Value = 0.1*df1['Portfolio'][x]
-                    Order_Status = "LONG"
-                    TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
-                    UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
-                    short_time = 0
-                    long_time = x
-                    neutral_time = 0
-                    buy_counter.append(x)
-                    RSI_enhance_price.append(df1['RSI'][x])
-                    MACD_enhance_price.append(df1['MACD'][x])
-                    RSI_enhance_date.append(df1.index.date[x])
-                    MACD_enhance_date.append(df1.index.date[x])
-                    P_enhance_price.append(df1['Portfolio'][x])
-                    P_enhance_date.append(df1.index.date[x])
+            if len(MACD_enhance_price)>0:
+                if df1['MACD'][x] < MACD_enhance_price[len(MACD_enhance_price)-1]:
+                    if x - 5 < buy_counter[len(buy_counter)-1]:
+                        Profit_Taken = Profit_Taken + TQQQ_Units*TQQQ['Close'][x]+UPRO_Units*UPRO['Close'][x] - Order_Value
+                        TQQQ_Units = 0
+                        UPRO_Units = 0
+                        Order_Value = 0.1*df1['Portfolio'][x]
+                        Order_Status = "SHORT"
+                        SQQQ_Units = (Order_Value/2)/SQQQ['Close'][x]
+                        SPXU_Units = (Order_Value/2)/SPXU['Close'][x]
+                        RSI_protect_price.append(df1['RSI'][x])
+                        MACD_protect_price.append(df1['MACD'][x])
+                        RSI_protect_date.append(df1.index.date[x])
+                        MACD_protect_date.append(df1.index.date[x])
+                        P_protect_price.append(df1['Portfolio'][x])
+                        P_protect_date.append(df1.index.date[x])
+                        sell_counter.append(x)
+                        short_time = x
+                        long_time = 0
+                        neutral_time = 0
+            if len(MACD_protect_price)>0:
+                if df1['MACD'][x] > MACD_protect_price[len(MACD_protect_price)-1]:
+                    if x - 5 < sell_counter[len(sell_counter)-1]:
+                        Profit_Taken = Profit_Taken + SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value
+                        SQQQ_Units = 0
+                        SPXU_Units = 0
+                        Order_Value = 0.1*df1['Portfolio'][x]
+                        Order_Status = "LONG"
+                        TQQQ_Units = (Order_Value/2)/TQQQ['Close'][x]
+                        UPRO_Units = (Order_Value/2)/UPRO['Close'][x]
+                        short_time = 0
+                        long_time = x
+                        neutral_time = 0
+                        buy_counter.append(x)
+                        RSI_enhance_price.append(df1['RSI'][x])
+                        MACD_enhance_price.append(df1['MACD'][x])
+                        RSI_enhance_date.append(df1.index.date[x])
+                        MACD_enhance_date.append(df1.index.date[x])
+                        P_enhance_price.append(df1['Portfolio'][x])
+                        P_enhance_date.append(df1.index.date[x])
         if Order_Value > 0:
             if Order_Status == "SHORT":
                 Enhanced_Portfolio_Value.append(df1['Portfolio'][x]+SQQQ_Units*SQQQ['Close'][x]+SPXU_Units*SPXU['Close'][x] - Order_Value + Profit_Taken)
