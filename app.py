@@ -72,6 +72,8 @@ def Model_Display(total_value, reason, rows):
     print(df1)
     print("fart")
     print(df['Holdings'])
+    print(df1[df['Holdings'][0]][0])
+    print(df['Units'][count2])
     while count1 < len(market1):
         market_portfolio1.append(united1*market1['Close'][count1])
         market_portfolio2.append(united2*market2['Close'][count1])
