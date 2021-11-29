@@ -80,6 +80,8 @@ def Model_Display(total_value, reason, rows):
             count2 = count2 + 1
         portfolio_value.append(round(quick_sum,2))
         count1 = count1 + 1
+    print(len(df1['Portfolio']))
+    print(len(df1['Market1']))
     df1['Portfolio'] = portfolio_value      
     df1['Market1'] = market_portfolio1
     df1['Market2'] = market_portfolio2
@@ -123,6 +125,7 @@ def Model_Display(total_value, reason, rows):
     sell_counter = []
     buy_counter = []
     while x < len(df1[df['Holdings'][0]]):
+        print(x)
         if df1['MACD'][x]>df1['MACD MEAN'][x]:
             if df1['MACD'][x-1] > df1['Signal Line'][x-1] and df1['MACD'][x-2] > df1['Signal Line'][x-2] and df1['MACD'][x-3] > df1['Signal Line'][x-3]:
                 if df1['MACD'][x-2]>df1['MACD'][x-3] and df1['MACD'][x-3]>df1['MACD'][x-4]:
