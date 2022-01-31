@@ -40,23 +40,23 @@ def Model_Display(total_value, reason, rows):
     amount_of_shares = []
     count = 0
     for h in df['Holdings']:
-        data = yf.download(h,start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+        data = yf.download(h,start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
         df2 = pd.DataFrame(data)
         df1[h] = df2['Close']
         df1[h][0] = df2['Close'][1]
         amount_of_shares.append(df['Dollar Allocation'][count]/df1[h][0])
         count = count + 1
-    market1 = yf.download("VOO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    market1 = yf.download("VOO",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
     united1 = total_value/market1['Close'][0]
-    market2 = yf.download("QQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    market2 = yf.download("QQQ",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
     united2 = total_value/market2['Close'][0]
-    market3 = yf.download("IOZ.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    market3 = yf.download("IOZ.AX",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
     united3 = total_value/market3['Close'][0]
-    market4 = yf.download("VTS.AX",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    SPXU = yf.download("SPXU",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    SQQQ = yf.download("SQQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    TQQQ = yf.download("TQQQ",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
-    UPRO = yf.download("UPRO",start =(date.today() - datetime.timedelta(days=2*365)), end = date.today())
+    market4 = yf.download("VTS.AX",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
+    SPXU = yf.download("SPXU",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
+    SQQQ = yf.download("SQQQ",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
+    TQQQ = yf.download("TQQQ",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
+    UPRO = yf.download("UPRO",start =(date.today() - datetime.timedelta(days=round(2.5*365))), end = date.today())
     united4 = total_value/market4['Close'][0]
     market_portfolio1 = []
     market_portfolio2 = []
